@@ -1,0 +1,4 @@
+fuzzy_c has finally begun to take some semblance of an engine.
+As you can see there is some physics, some poor downward collision detection, and some input controls.
+Felt so rewarding to get this to work I had to record. Thanks internet and chat gpt for helping me learn
+about unique ptrs
