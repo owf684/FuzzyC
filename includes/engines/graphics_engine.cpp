@@ -37,6 +37,8 @@ GraphicsEngine::GraphicsEngine(int input_width,int input_height, int input_bpp)
 		std::cerr << "Error creating window: " << SDL_GetError() << std::endl;	
 	} 	
 		
+    SDL_WM_SetCaption("FuzzyC", NULL);
+
 }
 
 /* Function: update()
