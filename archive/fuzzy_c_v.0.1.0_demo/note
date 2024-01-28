@@ -1,4 +1,9 @@
+// demo 1
 fuzzy_c has finally begun to take some semblance of an engine.
 As you can see there is some physics, some poor downward collision detection, and some input controls.
 Felt so rewarding to get this to work I had to record. Thanks internet and chat gpt for helping me learn
 about unique ptrs
+
+// demo 2
+I have finally figured out how to do collisions well using actual physics and boundary overlap 
+Calculations. The collision are way more robust than they've ever been
