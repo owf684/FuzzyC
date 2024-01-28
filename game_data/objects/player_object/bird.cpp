@@ -6,6 +6,7 @@ Bird::Bird()
 {   // open a json file maybe and read bird attributes then set them accordingly
     sprite.set_current("./assets/bird.bmp");
     object_id = 2;
+    physics.gravity = 980;
 }
 
 
@@ -21,7 +22,7 @@ void Bird::move_horizontal(InputEngine& input_engine)
     if (input_engine.arrow_keys.up &&  collider.is.down)
     {
         //move up
-        physics.impulse.y = -10000;
+        physics.impulse.y = -7000;
     }
     if (input_engine.arrow_keys.right)
     {
