@@ -14,15 +14,19 @@ bird_ptr->set_position(300,370);
 // setting position ---> need function in gameobject that repositions all the components
 platform_ptr->set_position(300,400);
 platform_ptr->physics.pause = true;
+platform_ptr->physics.mass = 100000;
 
 platform_ptr_2->set_position(450,350);
 platform_ptr_2->physics.pause = true;
+platform_ptr_2->physics.mass = 100000;
 
 platform_ptr_3->set_position(150,350);
 platform_ptr_3->physics.pause = true;
+platform_ptr_3->physics.mass = 100000;
 
 platform_ptr_4->set_position(300,250);
 platform_ptr_4->physics.pause = true;
+platform_ptr_4->physics.mass = 100000;
 
 // adding it to the render buffer
 graphics_e.render_buffer.push_back(std::move(bird_ptr));
@@ -54,8 +58,8 @@ while(!input_e.quit)
 
 		// update object components
 		object->update(input_e);
-		collision_e.update(object, graphics_e.render_buffer,input_e);
 		physics_e.update(object, input_e, dt_f);
+		collision_e.update(object, graphics_e.render_buffer,input_e);
 		sprite_e.update(object);
 
 		// move back into buffer
