@@ -29,6 +29,7 @@ PhysicsComponent::PhysicsComponent()
  velocity.y = 0.0;
  position.x = 0.0;
  position.y = 0.0;
+ gravity = 9.8;
  mass = 100.0;
  debug_enabled = false; 
  pause = false;
@@ -46,7 +47,7 @@ PhysicsComponent::PhysicsComponent()
  *
  */
 
-void PhysicsComponent::calculate_force(float gravity)
+void PhysicsComponent::calculate_force()
 {
   // F = M * A 
   force.y = mass * (gravity + impulse.y) ;
@@ -135,7 +136,7 @@ void PhysicsComponent::calculate_position(float dt)
 *  decrease of the impulse. 
 */ 
 
-void PhysicsComponent::calculate_impulse(float gravity)
+void PhysicsComponent::calculate_impulse()
 {
   if(impulse.y < 0)
   {
@@ -154,15 +155,15 @@ void PhysicsComponent::calculate_impulse(float gravity)
  *
  */
 
-void PhysicsComponent::update(float gravity, float dt)
+void PhysicsComponent::update(float dt)
 {
   if (dt< 0) throw frame_time_error();
 
-  calculate_force(gravity);
+  calculate_force();
   calculate_acceleration();
   calculate_velocity(dt);
   calculate_position(dt);
-  calculate_impulse(gravity);
+  calculate_impulse();
 
   if (debug_enabled)
   {
@@ -224,6 +225,7 @@ void PhysicsComponent::test(float gravity_in)
 
   // setup constants and frame rate variables
   const float gravity_t = gravity_in;
+  gravity = gravity_in;
   float dt = 0.0;
   const float frames_per_second = 60.0;
   const float microseconds = pow(10,6);
@@ -253,7 +255,7 @@ void PhysicsComponent::test(float gravity_in)
     auto dt_start = high_resolution_clock::now();
 
     acceleration.x = gravity_t;
-    update(gravity_t,dt);
+    update(dt);
 
     // capture test points
     if (time_elapsed >= 1.0 && time_elapsed <= 1.02)
@@ -381,4 +383,28 @@ void PhysicsComponent::reset()
   velocity.y = 0.0;
   position.x = 0.0;
   mass = 100.0;
+}
+
+/* Function: momentum_x()
+*
+* Purpose: This function calculates the 
+* current momentum of the object in the 
+* x direction
+*/
+
+float PhysicsComponent::momentum_x()
+{
+  return float(velocity.x*mass);
+}
+
+/* Function: momentum_y()
+*
+* Purpose: This function calculates the
+* current momentum of the object in
+* the y direction
+*/
+
+float PhysicsComponent::momentum_y()
+{
+  return float(velocity.y*mass);
 }

@@ -38,12 +38,14 @@ class PhysicsComponent
 
    float mass;
 
+   float gravity;
+   
    bool debug_enabled;
 
    bool pause; 
    
    // helper functions
-   void update(float gravity, float dt);
+   void update(float dt);
 
    void debug();	
 
@@ -51,12 +53,16 @@ class PhysicsComponent
 
    void reset();
 
+   float momentum_x();
+
+   float momentum_y();
+
    private:
 
    // these functions are responible 
    // for the entire physics simulation
    // the call order is as they are defined
-   void calculate_force(float gravity);   
+   void calculate_force();   
 
    void calculate_acceleration();
 
@@ -64,8 +70,9 @@ class PhysicsComponent
    
    void calculate_position(float dt);
    
-   void calculate_impulse(float gravity);
+   void calculate_impulse();
 
+ 
 
 };
 
