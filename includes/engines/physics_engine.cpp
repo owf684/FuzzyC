@@ -26,7 +26,7 @@ void PhysicsEngine::update(std::unique_ptr<GameObject>& object,InputEngine& inpu
 {
 
 
-    if (!object->physics.pause)  object->physics.update(980.0,dt);
+    if (!object->physics.pause)  object->physics.update(dt);
 
   
 
