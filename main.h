@@ -27,7 +27,7 @@
 *
 */
 float dt_f = 0;
-const float frames_per_second_f = 120.0;
+const float frames_per_second_f = 60.0;
 const float micro_seconds_f = pow(10,6); // == 1 / micro_seconds
 const float frame_duration_f = (1.0 / frames_per_second_f)*micro_seconds_f;
 float time_elapsed_f = 0.0;
