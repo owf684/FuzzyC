@@ -3,7 +3,7 @@
 
 #include "../objects/game_object.h"
 #include "../engines/input_engine.h"
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include <iostream>
 #include <vector>
 #include <memory>

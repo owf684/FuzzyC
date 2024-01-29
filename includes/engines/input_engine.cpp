@@ -33,7 +33,7 @@ quit = false;
 *
 */
 
-void InputEngine::get_keydown_event(SDLKey key_code)
+void InputEngine::get_keydown_event(SDL_Keycode key_code)
 {
 
 	// set arrow keys
@@ -68,7 +68,7 @@ void InputEngine::get_keydown_event(SDLKey key_code)
 *
 */
 
-void InputEngine::get_keyup_event(SDLKey key_code)
+void InputEngine::get_keyup_event(SDL_Keycode key_code)
 {
 
 	// unset arrow keys

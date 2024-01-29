@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS= -std=c++20
-LDFLAGS = -lstdc++ -lSDL 
+LDFLAGS = -lstdc++ -lSDL2 
 INCLUDES=./includes
 ENGINES=./includes/engines
 COMPONENTS=./includes/components

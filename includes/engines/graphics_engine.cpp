@@ -28,16 +28,21 @@ GraphicsEngine::GraphicsEngine(int input_width,int input_height, int input_bpp)
 	
 	
 	// initialize sdl
-	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		std::cerr << "Error Initializing SDL: " << SDL_GetError() << std::endl;
 	} 
 		
-	screen = SDL_SetVideoMode(width,height,bpp,SDL_SWSURFACE);
-	if (screen == NULL) {		
-		std::cerr << "Error creating window: " << SDL_GetError() << std::endl;	
-	} 	
-		
-    SDL_WM_SetCaption("FuzzyC", NULL);
+	window = SDL_CreateWindow("Fuzzy C",
+							SDL_WINDOWPOS_CENTERED,
+							SDL_WINDOWPOS_CENTERED,
+							width, height,
+							SDL_WINDOW_SHOWN);
+
+	if (!window) {std::cerr << "Failed to Create Window\n";}
+
+	SDL_UpdateWindowSurface(window);
+
+    //SDL_WM_SetCaption("FuzzyC", NULL);
 
 }
 
@@ -48,6 +53,7 @@ GraphicsEngine::GraphicsEngine(int input_width,int input_height, int input_bpp)
 
 void GraphicsEngine::update()
 {
+	/*
 	SDL_FillRect(screen,0,0);
 
 	for(int i = 0; i < render_buffer.size(); i++)
@@ -58,6 +64,8 @@ void GraphicsEngine::update()
 
 	SDL_Flip(screen);
 
+	*/
+	SDL_UpdateWindowSurface(window);
 
 }
 

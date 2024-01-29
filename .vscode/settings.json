@@ -9,6 +9,11 @@
             "cwd": "/Users/corona_systems/Desktop/projcets/FuzzyC",
             "binaryPath": "/Users/corona_systems/Desktop/projcets/FuzzyC/fuzzy_test",
             "binaryArgs": []
+        },
+        {
+            "cwd": "/home/chriscorona/FuzzyC",
+            "binaryPath": "/home/chriscorona/FuzzyC/fuzzy_test",
+            "binaryArgs": []
         }
     ],
     "makefile.buildLog": "./",

@@ -1,6 +1,6 @@
 #ifndef INPUT_ENGINE_H
 #define INPUT_ENGINE_H
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 
 
@@ -30,8 +30,8 @@ class InputEngine{
 	SDL_Event events;
 
 	// getters
-	void get_keydown_event(SDLKey key_code);
-	void get_keyup_event(SDLKey key_code);
+	void get_keydown_event(SDL_Keycode key_code);
+	void get_keyup_event(SDL_Keycode key_code);
 
 	//
 	void update();

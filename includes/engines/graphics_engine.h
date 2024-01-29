@@ -2,7 +2,7 @@
 #ifndef GRAPHICS_ENGINE_H
 #define GRAPHICS_ENGINE_H
 
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -22,6 +22,7 @@ public: // Constructor
 	int height;
 	int bpp;
 	SDL_Surface* screen;
+	SDL_Window* window; 
 	
 	std::vector<std::unique_ptr <GameObject> > render_buffer;
 
