@@ -14,6 +14,11 @@
             "cwd": "/home/chriscorona/FuzzyC",
             "binaryPath": "/home/chriscorona/FuzzyC/fuzzy_test",
             "binaryArgs": []
+        },
+        {
+            "cwd": "/Users/corona_systems/VSCodeProjects/FuzzyC",
+            "binaryPath": "/Users/corona_systems/VSCodeProjects/FuzzyC/fuzzy_test",
+            "binaryArgs": []
         }
     ],
     "makefile.buildLog": "./",
