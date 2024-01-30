@@ -23,6 +23,8 @@ public: // Constructor
 	int bpp;
 	SDL_Surface* screen;
 	SDL_Window* window; 
+	SDL_Renderer* renderer;
+	
 	
 	std::vector<std::unique_ptr <GameObject> > render_buffer;
 
