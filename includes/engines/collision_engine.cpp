@@ -75,7 +75,7 @@ void CollisionEngine::update(std::unique_ptr<GameObject>& object,
 *
 */
 
-bool CollisionEngine::down_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
+ void CollisionEngine::down_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
 {
     if (above(current_object, other))
     {
@@ -102,7 +102,7 @@ bool CollisionEngine::down_collision(std::unique_ptr<GameObject>& current_object
 *
 */
 
-bool CollisionEngine::up_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
+void CollisionEngine::up_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
 {
     if ( below(current_object,other) )
     {
@@ -126,7 +126,7 @@ bool CollisionEngine::up_collision(std::unique_ptr<GameObject>& current_object, 
 *
 */
 
-bool CollisionEngine::left_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
+void CollisionEngine::left_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
 {       
     if (to_right(current_object,other))
     {
@@ -153,7 +153,7 @@ bool CollisionEngine::left_collision(std::unique_ptr<GameObject>& current_object
 *
 */
 
-bool CollisionEngine::right_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
+void CollisionEngine::right_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
 {
     if ( to_left(current_object,other) )
     {
