@@ -3,7 +3,7 @@
 
 #include "../objects/game_object.h"
 #include "../engines/input_engine.h"
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -18,10 +18,10 @@ class CollisionEngine{
 
     private:
         // collision handlers
-        bool down_collision(std::unique_ptr<GameObject>& current_object,std::unique_ptr<GameObject>& other);
-        bool up_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other);
-        bool left_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other);
-        bool right_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other);
+        void down_collision(std::unique_ptr<GameObject>& current_object,std::unique_ptr<GameObject>& other);
+        void up_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other);
+        void left_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other);
+        void right_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other);
         
         // collision detection
         bool above(std::unique_ptr<GameObject>& object_1, std::unique_ptr<GameObject>& object_2);

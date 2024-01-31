@@ -1,7 +1,7 @@
 #ifndef SPRITE_COMPONENT_H
 #define SPRITE_COMPONENT_H
 
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include <vector>
 #include <string>
 
