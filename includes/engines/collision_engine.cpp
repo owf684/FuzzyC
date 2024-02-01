@@ -16,10 +16,10 @@
 * where I can optimize the collision
 * algorithm
 *
-* Things to do: Need to implement 
-* left, right, and up collision
-* detection 
-*
+* Things to do: 
+* Need to implement system where users can 
+* define what type of collisions an object
+* delivers to other objects
 */
 
 #include "collision_engine.h"
