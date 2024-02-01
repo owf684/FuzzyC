@@ -33,6 +33,7 @@ class CollisionEngine{
         void handle_physics(std::unique_ptr<GameObject>& current_object);
         void x_inelastic_collision(std::unique_ptr<GameObject>& current_object,std::unique_ptr<GameObject>& other);
         void y_inelastic_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other);
+        void x_elastic_collision(std::unique_ptr<GameObject>& current_object,std::unique_ptr<GameObject>& other);
         void y_elastic_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other);
 
 };

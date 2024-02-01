@@ -115,6 +115,8 @@ void CollisionEngine::up_collision(std::unique_ptr<GameObject>& current_object, 
             current_object->set_position(current_object->physics.position.x, corrected_y_position);
 
         }
+
+        y_elastic_collision(current_object,other);
     }
 
 }
@@ -407,5 +409,85 @@ void CollisionEngine::y_inelastic_collision(std::unique_ptr<GameObject>& current
 
     current_object->physics.velocity.y = v;
     other->physics.velocity.y = v;
+
+}
+
+/* Function: y_elastic_collision()
+*
+* Purpose: this function calculates the 
+* elastic collision between current_object 
+* and other in the y_axis
+*
+*/
+
+void CollisionEngine::y_elastic_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
+{
+    current_object->physics.impulse.y = 0;
+/*
+    v1 = ((m1 – m2)*u1 + 2*m2*u2) / (m1 + m2)
+    v2 = ((m2 – m1)*u2 + 2*m1*u1) / (m1 + m2)
+*/
+    // calculate total mass
+    int total_mass = current_object->physics.mass + other->physics.mass;
+
+    // working out v1 terms t
+    float v1_t1 = (current_object->physics.mass - other->physics.mass)*current_object->physics.velocity.y;
+    float v1_t2 = 2*other->physics.mass*other->physics.velocity.y;
+
+    // working out v2 terms t
+    float v2_t1 = (other->physics.mass - current_object->physics.mass)*other->physics.velocity.y;
+    float v2_t2 = 2*current_object->physics.mass*current_object->physics.velocity.y;
+
+    // calculate v1 velocity
+    float v1 = (v1_t1 + v1_t2) / total_mass;
+
+    // calculate v2 velocity 
+    float v2 = (v2_t1 + v2_t2) / total_mass;
+
+
+    // update object velocities
+    current_object->physics.velocity.y = v1;
+
+    other->physics.velocity.y = v2;
+    
+
+}
+
+/* Function: x_elastic_collision()
+*
+* Purpose: this function calculates the 
+* elastic collision between current_object 
+* and other in the x_axis
+*
+*/
+
+void CollisionEngine::x_elastic_collision(std::unique_ptr<GameObject>& current_object,std::unique_ptr<GameObject>& other)
+{
+    /*
+    v1 = ((m1 – m2)*u1 + 2*m2*u2) / (m1 + m2)
+    v2 = ((m2 – m1)*u2 + 2*m1*u1) / (m1 + m2)
+*/
+    // calculate total mass
+    int total_mass = current_object->physics.mass + other->physics.mass;
+
+    // working out v1 terms t
+    float v1_t1 = (current_object->physics.mass - other->physics.mass)*current_object->physics.velocity.x;
+    float v1_t2 = 2*other->physics.mass*other->physics.velocity.x;
+
+    // working out v2 terms t
+    float v2_t1 = (other->physics.mass - current_object->physics.mass)*other->physics.velocity.x;
+    float v2_t2 = 2*current_object->physics.mass*current_object->physics.velocity.x;
+
+    // calculate v1 velocity
+    float v1 = (v1_t1 + v1_t2) / total_mass;
+
+    // calculate v2 velocity 
+    float v2 = (v2_t1 + v2_t2) / total_mass;
+
+
+    // update object velocities
+    current_object->physics.velocity.x = v1;
+
+    other->physics.velocity.x = v2;
 
 }
