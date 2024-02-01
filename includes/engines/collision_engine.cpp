@@ -283,7 +283,7 @@ bool CollisionEngine::to_left(std::unique_ptr<GameObject>& object_1, std::unique
             return true;
 
         else if ( object_1->collider.top() > object_2->collider.top() &&
-                  object_1->collider.top() < object_2->collider.bottom())
+                  object_1->collider.top() + 2*y_tolerance < object_2->collider.bottom())
 
             return true;
 
@@ -329,7 +329,7 @@ bool CollisionEngine::to_right(std::unique_ptr<GameObject>& object_1, std::uniqu
             return true;
 
         else if ( object_1->collider.top() > object_2->collider.top() &&
-                  object_1->collider.top() < object_2->collider.bottom())
+                  object_1->collider.top()+ 2*y_tolerance < object_2->collider.bottom())
 
             return true;
 
