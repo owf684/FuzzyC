@@ -35,6 +35,7 @@ graphics_e.render_buffer.push_back(std::move(platform_ptr_2));
 graphics_e.render_buffer.push_back(std::move(platform_ptr_3));
 graphics_e.render_buffer.push_back(std::move(platform_ptr_4));
 
+bool first_pass = true;
 
 std::unique_ptr<GameObject> object;
 
@@ -44,30 +45,39 @@ while(!input_e.quit)
 	// capture current time
 	auto dt_start = high_resolution_clock::now();
 	
-	// update engines
 	input_e.update();
 	graphics_e.update();
 
-	// update all objects
-	//for(auto& object: graphics_e.render_buffer)
-	for(int i =0; i < graphics_e.render_buffer.size(); i++)
-	{	
-		// move out of buffer
-		object = std::move(graphics_e.render_buffer.back());
-		graphics_e.render_buffer.pop_back();
+	if (fei.fuzzy_engine_interface.play || first_pass)
+	{
+		// update engines
 
-		// update object components
-		object->update(input_e);
-		physics_e.update(object, input_e, dt_f);
-		collision_e.update(object, graphics_e.render_buffer,input_e);
-		sprite_e.update(object);
+		// update all objects
+		//for(auto& object: graphics_e.render_buffer)
+		for(int i =0; i < graphics_e.render_buffer.size(); i++)
+		{	
+			// move out of buffer
+			object = std::move(graphics_e.render_buffer.back());
+			graphics_e.render_buffer.pop_back();
 
-		// move back into buffer
-  		std::vector< std::unique_ptr<GameObject> >::iterator it;
-		it = graphics_e.render_buffer.begin();
-		graphics_e.render_buffer.insert(it, std::move(object));
+			// update object components
+			object->update(input_e);
+			physics_e.update(object, input_e, dt_f);
+			collision_e.update(object, graphics_e.render_buffer,input_e);
+			sprite_e.update(object);
 
+			// move back into buffer
+  			std::vector< std::unique_ptr<GameObject> >::iterator it;
+			it = graphics_e.render_buffer.begin();
+			graphics_e.render_buffer.insert(it, std::move(object));
+
+			if (first_pass) first_pass = false;
+
+		}
 	}
+
+	// read shared memory
+	fei.read_memory();
 
 	// update delta time step
 	usleep(frame_duration_f);
