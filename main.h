@@ -9,7 +9,7 @@
 #include "./includes/objects/game_object.h"
 #include "./game_data/objects/player_object/bird.h"
 #include "./game_data/objects/environment_objects/test_platform.h"
-
+#include "./includes/shared_memory/fuzzy_engine_interface.h"
 #include <ctime>
 #include <unistd.h>
 #include <iostream>
@@ -40,7 +40,7 @@ float time_elapsed_f = 0.0;
 * the name is followed by '_e' to indicate
 * that these variables are engine types
 */
-GraphicsEngine graphics_e(800,600,32);
+GraphicsEngine graphics_e(1060,600,32);
 InputEngine input_e;
 SpriteEngine sprite_e;
 PhysicsEngine physics_e;
@@ -58,6 +58,8 @@ std::unique_ptr<TestPlatform> platform_ptr_3 ( new TestPlatform() );
 std::unique_ptr<TestPlatform> platform_ptr_4 ( new TestPlatform() );
 std::unique_ptr<TestPlatform> platform_ptr_5 ( new TestPlatform() );
 
-
+/* shared memory variables
+*/
+FuzzyEngineInterface fei;
 
 #endif 
