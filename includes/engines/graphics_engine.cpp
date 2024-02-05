@@ -28,6 +28,7 @@ GraphicsEngine::GraphicsEngine(int input_width,int input_height, int input_bpp)
 	
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_CreateWindowAndRenderer(width, height, 0, &window, &renderer);
+	SDL_SetWindowPosition(window,0,0);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
