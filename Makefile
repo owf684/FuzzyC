@@ -7,11 +7,12 @@ COMPONENTS=./includes/components
 OBJECTS=./includes/objects
 BUILD=./build
 GAMEOBJECTS=./game_data/objects
+SHAREDMEM=./includes/shared_memory
 
-all: fuzzy_test
+all: fuzzy_engine
 
 
-fuzzy_test: main.o \
+fuzzy_engine: main.o \
 			graphics_engine.o \
 			input_engine.o \
 			sprite_engine.o \
@@ -22,9 +23,11 @@ fuzzy_test: main.o \
 			collider_component.o \
 			game_object.o \
 			bird.o \
-			test_platform.o
+			test_platform.o \
+			fuzzy_engine_interface.o \
 
-	$(CXX)  $(CXXFLAGS) $(LDFLAGS) -o fuzzy_test $(BUILD)/main.o \
+
+	$(CXX)  $(CXXFLAGS) $(LDFLAGS) -o fuzzy_engine $(BUILD)/main.o \
 									 $(BUILD)/graphics_engine.o \
 									 $(BUILD)/input_engine.o \
 									 $(BUILD)/sprite_engine.o \
@@ -35,10 +38,10 @@ fuzzy_test: main.o \
 									 $(BUILD)/collider_component.o \
 									 $(BUILD)/game_object.o \
 									 $(BUILD)/bird.o \
-									 $(BUILD)/test_platform.o
-							
-
+									 $(BUILD)/test_platform.o \
+									 $(BUILD)/fuzzy_engine_interface.o \
 									 
+																					 
 main.o:
 	$(CXX) $(CXXFLAGS) -c main.cpp -o $(BUILD)/main.o
 
@@ -75,5 +78,7 @@ bird.o:
 test_platform.o:
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c $(GAMEOBJECTS)/environment_objects/test_platform.cpp -o $(BUILD)/test_platform.o
 
+fuzzy_engine_interface.o:
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c $(SHAREDMEM)/fuzzy_engine_interface.cpp -o $(BUILD)/fuzzy_engine_interface.o
 clean:
-	rm -f ./$(BUILD)/*.o fuzzy_test
+	rm -f ./$(BUILD)/*.o fuzzy_engine
