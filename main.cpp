@@ -45,13 +45,15 @@ while(!input_e.quit)
 	// capture current time
 	auto dt_start = high_resolution_clock::now();
 	
-	input_e.update();
+	
+
 	graphics_e.update();
+	input_e.update();
 
 	if (fei.fuzzy_engine_interface.play || first_pass)
 	{
 		// update engines
-
+		
 		// update all objects
 		//for(auto& object: graphics_e.render_buffer)
 		for(int i =0; i < graphics_e.render_buffer.size(); i++)

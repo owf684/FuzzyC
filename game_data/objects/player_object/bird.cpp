@@ -5,7 +5,6 @@ using namespace std;
 Bird::Bird()
 {   // open a json file maybe and read bird attributes then set them accordingly
     sprite.set_current("./assets/bird.bmp");
-    object_id = 2;
     physics.gravity = 980;
 }
 

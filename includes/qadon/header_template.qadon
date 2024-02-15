@@ -1,0 +1,13 @@
+{
+    line_1 :#ifndef CLASS_NAME_H
+    line_2 :#define CLASS_NAME_H
+    line_3 :#include "../../../includes/objects/game_object.h"
+    line_4 :#include "../../../includes/engines/input_engine.h"
+    line_5 :class class_name : public GameObject 
+    line_6 :{
+    line_7 :public:
+    line_8 :class_name();
+    line_9 :void update(InputEngine& input_enigne) override;
+    line_10 :};
+    line_11 :#endif
+}
