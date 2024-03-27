@@ -16,6 +16,7 @@
 
 #include "graphics_engine.h"
 #include "engine_globals.h"
+#include "interface_globals.h"
 
 // Constructor
 GraphicsEngine::GraphicsEngine(int input_width,int input_height, int input_bpp)
@@ -27,9 +28,8 @@ GraphicsEngine::GraphicsEngine(int input_width,int input_height, int input_bpp)
 	
 	
     SDL_Init(SDL_INIT_EVERYTHING);
-    SDL_CreateWindowAndRenderer(width, height, 0, &window, &renderer);
+    SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_RESIZABLE, &window, &renderer);
 	SDL_SetWindowPosition(window,0,0);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
 
@@ -43,7 +43,7 @@ GraphicsEngine::GraphicsEngine(int input_width,int input_height, int input_bpp)
 void GraphicsEngine::update()
 {
 
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(renderer, (Uint8)(scene_color.x * 255), (Uint8)(scene_color.y * 255), (Uint8)(scene_color.z * 255), (Uint8)(scene_color.w * 255));;
     SDL_RenderClear(renderer);
 	
 	for (int i = 0; i < render_buffer.size(); i++) {
@@ -65,7 +65,10 @@ void GraphicsEngine::update()
    	 	}
 	}
 
+	engine_interface.update();
+	
 	SDL_RenderPresent(renderer);
+
 
 
 
