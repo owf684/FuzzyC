@@ -14,6 +14,9 @@
 */
 
 #include "input_engine.h"
+#include "imgui.h"
+#include "imgui_impl_sdl2.h"
+#include "imgui_impl_sdlrenderer2.h"
 #include "iostream"
 #include "engine_globals.h"
 
@@ -105,6 +108,9 @@ void InputEngine::get_keyup_event(SDL_Keycode key_code)
 void InputEngine::update()
 {
 	SDL_PollEvent(&events);
+
+	ImGui_ImplSDL2_ProcessEvent(&events);
+
 	switch(events.type)
 	{
 		case SDL_KEYDOWN:
