@@ -14,7 +14,7 @@ class Bird : public GameObject
         void move_horizontal();
 };
 
-extern "C"
+/*extern "C"
 {
     std::unique_ptr<GameObject> generate_object()
     {
@@ -22,6 +22,6 @@ extern "C"
 
         return  object;
     }
-}
+}*/
 
 #endif
