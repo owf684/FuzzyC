@@ -4,7 +4,7 @@
 
 #include "./includes/objects/game_object.h"
 #include "./includes/engine_globals.h"
-//#include "./game_data/objects/bird.h"
+#include "./game_data/objects/bird.h"
 #include "./game_data/objects/test_platform.h"
 #include <ctime>
 #include <unistd.h>
@@ -70,7 +70,7 @@ EngineInterface engine_interface;
 ObjectHandler object_handler;
 
 // GameObject Testing
-//std::unique_ptr<Bird> bird_ptr( new Bird() );
+std::unique_ptr<Bird> bird_ptr( new Bird() );
 std::unique_ptr<TestPlatform> platform_ptr ( new TestPlatform() );
 std::unique_ptr<TestPlatform> platform_ptr_2 ( new TestPlatform() );
 std::unique_ptr<TestPlatform> platform_ptr_3 ( new TestPlatform() );
