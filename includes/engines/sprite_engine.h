@@ -1,9 +1,8 @@
+#pragma once
 #ifndef SPRITE_ENGINE_H
 #define SPRITE_ENGINE_H
-#include "../objects/game_object.h"
 #include <memory>
-
-
+#include "game_object.h"
 
 
 

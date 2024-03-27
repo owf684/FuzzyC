@@ -1,84 +1,37 @@
+INCLUDES = ./includes/
+ENGINES = ./includes/engines
+COMPONENTS = ./includes/components
+OBJECTS_LIB = ./includes/objects
+GAMEOBJECTS = ./game_data/objects
+IMGUI = ./includes/imgui
 CXX = g++
-CXXFLAGS= -std=c++20
-LDFLAGS = -lstdc++ -lSDL2 
-INCLUDES=./includes
-ENGINES=./includes/engines
-COMPONENTS=./includes/components
-OBJECTS=./includes/objects
-BUILD=./build
-GAMEOBJECTS=./game_data/objects
-SHAREDMEM=./includes/shared_memory
+CXXFLAGS += -std=c++20 $(shell sdl2-config --cflags)
+CXXFLAGS += -I$(IMGUI) -I$(IMGUI)/backends -I$(INCLUDES) -I$(OBJECTS_LIB)
+LDFLAGS = -lstdc++ -lSDL2
+# List of source files
+SOURCES := ./main.cpp \
+		   $(wildcard $(ENGINES)/*.cpp) \
+           $(wildcard $(COMPONENTS)/*.cpp) \
+           $(wildcard $(OBJECTS_LIB)/*.cpp) \
+           $(wildcard $(GAMEOBJECTS)/*.cpp) \
+		   $(wildcard $(IMGUI)/*.cpp) \
+		   $(IMGUI)/backends/imgui_impl_sdl2.cpp \
+		   $(IMGUI)/backends/imgui_impl_sdlrenderer2.cpp
 
+# List of object files
+OBJECTS := $(patsubst %.cpp, %.o, $(SOURCES))
+
+# Main target
 all: fuzzy_engine
 
+# Rule to compile object files
+	$(CXX) $(CXXFLAGS) -c  $< -o $@
 
-fuzzy_engine: main.o \
-			graphics_engine.o \
-			input_engine.o \
-			sprite_engine.o \
-			physics_engine.o \
-			collision_engine.o\
-			sprite_component.o \
-			physics_component.o \
-			collider_component.o \
-			game_object.o \
-			bird.o \
-			test_platform.o \
-			fuzzy_engine_interface.o \
+# Rule to link the executable
+fuzzy_engine: $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
 
 
-	$(CXX)  $(CXXFLAGS) $(LDFLAGS) -o fuzzy_engine $(BUILD)/main.o \
-									 $(BUILD)/graphics_engine.o \
-									 $(BUILD)/input_engine.o \
-									 $(BUILD)/sprite_engine.o \
-									 $(BUILD)/physics_engine.o \
-									 $(BUILD)/collision_engine.o\
-									 $(BUILD)/sprite_component.o \
-									 $(BUILD)/physics_component.o \
-									 $(BUILD)/collider_component.o \
-									 $(BUILD)/game_object.o \
-									 $(BUILD)/bird.o \
-									 $(BUILD)/test_platform.o \
-									 $(BUILD)/fuzzy_engine_interface.o \
-									 
-																					 
-main.o:
-	$(CXX) $(CXXFLAGS) -c main.cpp -o $(BUILD)/main.o
-
-graphics_engine.o:
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c $(ENGINES)/graphics_engine.cpp -o $(BUILD)/graphics_engine.o
-
-input_engine.o:
-	$(CXX) $(CXXFLAGS) -c $(ENGINES)/input_engine.cpp -o $(BUILD)/input_engine.o
-
-sprite_engine.o:
-	$(CXX) $(CXXFLAGS) -c $(ENGINES)/sprite_engine.cpp -o $(BUILD)/sprite_engine.o
-
-physics_engine.o:
-	$(CXX) $(CXXFLAGS) -c $(ENGINES)/physics_engine.cpp -o $(BUILD)/physics_engine.o
-
-collision_engine.o:
-	$(CXX) $(CXXFLAGS) -c $(ENGINES)/collision_engine.cpp -o $(BUILD)/collision_engine.o
-	
-sprite_component.o:
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c $(COMPONENTS)/sprite_component.cpp -o $(BUILD)/sprite_component.o
-
-physics_component.o:
-	$(CXX) $(CXXFLAGS) -c $(COMPONENTS)/physics_component.cpp -o $(BUILD)/physics_component.o
-
-collider_component.o:
-	$(CXX) $(CXXFLAGS) -c $(COMPONENTS)/collider_component.cpp -o $(BUILD)/collider_component.o 
-
-game_object.o:
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c $(OBJECTS)/game_object.cpp -o $(BUILD)/game_object.o
-
-bird.o:
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c $(GAMEOBJECTS)/player_object/bird.cpp -o $(BUILD)/bird.o
-
-test_platform.o:
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c $(GAMEOBJECTS)/environment_objects/test_platform.cpp -o $(BUILD)/test_platform.o
-
-fuzzy_engine_interface.o:
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c $(SHAREDMEM)/fuzzy_engine_interface.cpp -o $(BUILD)/fuzzy_engine_interface.o
+# Clean rule
 clean:
-	rm -f ./$(BUILD)/*.o fuzzy_engine
+	rm -rf $(OBJECTS) fuzzy_engine 

@@ -3,9 +3,9 @@
 
 
 // prototypes
-std::string upper(std::string& line);
-void create_header(std::string class_name, qadon object_template);
-void create_cpp(std::string class_name, qadon object_template);
+//std::string upper(std::string& line);
+//void create_header(std::string class_name, qadon object_template);
+//void create_cpp(std::string class_name, qadon object_template);
 
 
 

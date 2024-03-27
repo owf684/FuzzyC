@@ -112,7 +112,13 @@
         "utility": "cpp",
         "stop_token": "cpp",
         "thread": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "filesystem": "cpp",
+        "__tree": "cpp",
+        "codecvt": "cpp",
+        "fstream": "cpp",
+        "map": "cpp",
+        "stack": "cpp"
     },
     "C_Cpp.dimInactiveRegions": false
 }

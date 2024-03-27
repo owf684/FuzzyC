@@ -29,7 +29,7 @@ using namespace std;
 *
 */
 
-void GameObject::update(InputEngine& input_engine)
+void GameObject::update()
 {
 }
 

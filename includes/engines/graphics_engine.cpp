@@ -15,7 +15,7 @@
 */
 
 #include "graphics_engine.h"
-
+#include "engine_globals.h"
 
 // Constructor
 GraphicsEngine::GraphicsEngine(int input_width,int input_height, int input_bpp)

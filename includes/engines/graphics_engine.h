@@ -6,10 +6,8 @@
 #include <iostream>
 #include <vector>
 #include <memory>
-
+#include "game_object.h"
 // custom libraries
-#include "../objects/game_object.h"
-
 
 
 

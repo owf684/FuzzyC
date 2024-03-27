@@ -1,0 +1,11 @@
+{
+cpp_file : ./game_data/objects/new_object.cpp
+draw_layer : 1
+sprite_2 : None
+h_file : ./game_data/objects/new_object.h
+sprite_4 : None
+sprite_3 : None
+sprite_1 : None
+current_sprite : None
+object_name : new_object
+}

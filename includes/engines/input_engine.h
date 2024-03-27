@@ -1,7 +1,7 @@
+#pragma once
 #ifndef INPUT_ENGINE_H
 #define INPUT_ENGINE_H
 #include <SDL2/SDL.h>
-
 
 
 class InputEngine{

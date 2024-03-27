@@ -1,15 +1,11 @@
+#pragma once
 #ifndef MAIN_H
 #define MAIN_H
 
-#include "./includes/engines/graphics_engine.h"
-#include "./includes/engines/input_engine.h"
-#include "./includes/engines/sprite_engine.h"
-#include "./includes/engines/physics_engine.h"
-#include "./includes/engines/collision_engine.h"
 #include "./includes/objects/game_object.h"
-#include "./game_data/objects/player_object/bird.h"
-#include "./game_data/objects/environment_objects/test_platform.h"
-#include "./includes/shared_memory/fuzzy_engine_interface.h"
+#include "./includes/engine_globals.h"
+//#include "./game_data/objects/bird.h"
+#include "./game_data/objects/test_platform.h"
 #include <ctime>
 #include <unistd.h>
 #include <iostream>
@@ -17,49 +13,70 @@
 #include <thread>
 #include <cmath>
 #include <SDL2/SDL.h>
-#include <memory>
+#include <vector>
+#include "interface_globals.h"
+#include <string>
+#include <qadon.h>
+#include "objects.h"
 
 
-
-
-/* Frame Rate Variables
-*
+/* Initialize Interface Globals
 *
 */
-float dt_f = 0;
-const float frames_per_second_f = 60.0;
+
+// Engine Interface Variables
+bool play_pause = false;
+
+
+// Scene Editor Variables
+ImVec4 	scene_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+
+// Object Editor Variables
+bool add_object_menu_active = false;
+char object_name[128] = "";
+std::vector <std::string> asset_list = {};
+int sprite_name_index =0;
+int last_selected_sprite_index = 0;
+int selected_asset_index = 0;
+int draw_layer_index = 0;
+std::string selected_sprite[5] {"None","None","None","None","None"};
+qadon object_data;
+bool object_save_button_active = false;
+
+
+/* Engine Globals
+*
+*/
+
+// Frame Rate Variables
+float dt = 0;
+float frames_per_second_f = 120.0;
 const float micro_seconds_f = pow(10,6); // == 1 / micro_seconds
 const float frame_duration_f = (1.0 / frames_per_second_f)*micro_seconds_f;
 float time_elapsed_f = 0.0;
 
 
-/* Engines Variables
-*
-* Name Description: The engines' name indicates
-* what component the engine will update.
-* the name is followed by '_e' to indicate
-* that these variables are engine types
-*/
-GraphicsEngine graphics_e(1060,600,32);
-InputEngine input_e;
-SpriteEngine sprite_e;
-PhysicsEngine physics_e;
-CollisionEngine collision_e;
+// Engines Variables
+GraphicsEngine graphics_engine(1440,900,32);
+InputEngine input_engine;
+SpriteEngine sprite_engine;
+PhysicsEngine physics_engine;
+CollisionEngine collision_engine;
+EngineInterface engine_interface;
 
-/* GameObject Testing
-*
-*
-*/
 
-std::unique_ptr<Bird> bird_ptr( new Bird() );
+// Object Variables
+ObjectHandler object_handler;
+
+// GameObject Testing
+//std::unique_ptr<Bird> bird_ptr( new Bird() );
 std::unique_ptr<TestPlatform> platform_ptr ( new TestPlatform() );
 std::unique_ptr<TestPlatform> platform_ptr_2 ( new TestPlatform() );
 std::unique_ptr<TestPlatform> platform_ptr_3 ( new TestPlatform() );
 std::unique_ptr<TestPlatform> platform_ptr_4 ( new TestPlatform() );
 std::unique_ptr<TestPlatform> platform_ptr_5 ( new TestPlatform() );
 
-/* shared memory variables
-*/
-FuzzyEngineInterface fei;
+
 
 #endif 

@@ -15,6 +15,8 @@
 
 #include "input_engine.h"
 #include "iostream"
+#include "engine_globals.h"
+
 using namespace std;
 
 
