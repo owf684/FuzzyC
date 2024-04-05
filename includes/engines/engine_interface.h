@@ -18,7 +18,8 @@ class EngineInterface {
         void add_object_menu();
         // bools 
         bool show_add_object_menu;
-
+        bool place_object_enabled;
+        bool already_placed; 
         struct  {
             char object_name[256];
             int draw_layer_index;
