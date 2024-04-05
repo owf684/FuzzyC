@@ -25,7 +25,8 @@ class InputEngine{
 	} awsd;
 
 	bool quit;
-	
+	bool left_click;
+	bool right_click;
 
 	SDL_Event events;
 
