@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
 
 
 // creating a test game object
-bird_ptr->set_position(300,370);
+//bird_ptr->set_position(300,370);
 
 // setting position ---> need function in gameobject that repositions all the components
 platform_ptr->set_position(300,400);
@@ -29,7 +29,7 @@ platform_ptr_4->physics.pause = true;
 platform_ptr_4->physics.mass = 100000;
 
 // adding it to the render buffer
-graphics_engine.render_buffer.push_back(std::move(bird_ptr));
+//graphics_engine.render_buffer.push_back(std::move(bird_ptr));
 graphics_engine.render_buffer.push_back(std::move(platform_ptr));
 graphics_engine.render_buffer.push_back(std::move(platform_ptr_2));
 graphics_engine.render_buffer.push_back(std::move(platform_ptr_3));
@@ -37,9 +37,11 @@ graphics_engine.render_buffer.push_back(std::move(platform_ptr_4));
 
 bool first_pass = true;
 
+object_handler.init_objects();
+object_util.set_object_lib_path("./includes/objects/object_library.qadon");
+object_util.set_rdoh_file_path("./includes/objects/rdoh.cpp");
 std::unique_ptr<GameObject> object;
 
-//object_handler.load_object_library("bird" , "./game_data/lib/bird.so");
 
 // main game loop 
 while(!input_engine.quit)
