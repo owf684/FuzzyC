@@ -21,8 +21,9 @@ class GameObject{
     void set_position(int x, int y);
     
     virtual void update();
-
+  
     virtual ~GameObject() = default;
+  
 };
 
 

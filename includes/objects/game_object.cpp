@@ -53,3 +53,5 @@ void GameObject::set_position(int x, int y)
     collider.box.x = x; collider.box.y = y;
 }
 
+
+
