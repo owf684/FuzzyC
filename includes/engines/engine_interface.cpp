@@ -4,7 +4,7 @@
 #include "imgui.h"
 #include "imgui_impl_sdl2.h"
 #include "imgui_impl_sdlrenderer2.h"
-
+#include "bird.h"
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
 #endif
@@ -23,7 +23,7 @@ EngineInterface::EngineInterface()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     
-    //ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 
     // Setup Dear ImGui style
@@ -118,6 +118,22 @@ void EngineInterface::object_contorls(){
         {
 
         }
+
+        ImGui::Checkbox("Place Objects", &place_object_enabled);
+        
+        if (place_object_enabled)
+        {
+            if (input_engine.left_click && !already_placed) //bug here when clicking on other menu items objects are placed!
+            {
+                already_placed = true;
+                object_handler.generate_object("Chris",ImGui::GetMousePos());
+            
+            } else if (!input_engine.left_click && already_placed)
+            {
+                already_placed = false;
+            }
+        } 
+
     ImGui::End();
 }
 
@@ -129,7 +145,7 @@ void EngineInterface::scene_controls(){
 
     }
     ImGui::SameLine();
-    
+
     if (ImGui::Button("Remove Scene"))
     {
 
@@ -178,6 +194,10 @@ void EngineInterface::add_object_menu()
         if (ImGui::Button("Save"))
         {
             show_add_object_menu = false;
+            object_util.create_object_files(object_info.object_name,object_info.defaut_sprite);
+            object_util.add_object(object_info.object_name);
+            system("make all; ./restart_engine.sh&");
+        
             // process data 
         }
         ImGui::SameLine();
