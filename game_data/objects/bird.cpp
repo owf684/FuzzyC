@@ -1,8 +1,9 @@
 #include "bird.h"
 #include "iostream"
+
 using namespace std;
 
-Bird::Bird()
+bird::bird()
 {   // open a json file maybe and read bird attributes then set them accordingly
 
     try {
@@ -17,14 +18,14 @@ Bird::Bird()
 }
 
 
-void Bird::update()
+void bird::update()
 {
     move_horizontal();    
 
 }
 
 
-void Bird::move_horizontal()
+void bird::move_horizontal()
 {
     if (input_engine.arrow_keys.up &&  collider.is.down) // bug here for some reason this true upon engine start. screws things up
     {
@@ -61,6 +62,8 @@ void Bird::move_horizontal()
     {
         // move down?
     }
+
+
 
 }
 
