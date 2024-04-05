@@ -120,6 +120,24 @@ void InputEngine::update()
 			get_keyup_event(events.key.keysym.sym);
 			break;
 
+		case SDL_MOUSEBUTTONDOWN:
+			if (events.button.button == SDL_BUTTON_LEFT)
+			{
+				left_click = true;
+			} else if (events.button.button == SDL_BUTTON_RIGHT)
+			{
+				right_click = true;
+			}
+			break;
+		case SDL_MOUSEBUTTONUP:
+			if (events.button.button == SDL_BUTTON_LEFT)
+			{
+				left_click = false;
+			} else if (events.button.button == SDL_BUTTON_RIGHT)
+			{
+				right_click = false;
+			}
+			break;
 		case SDL_QUIT:
 			quit = true;
 			break;
