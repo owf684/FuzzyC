@@ -17,7 +17,8 @@
 #include "interface_globals.h"
 #include <string>
 #include <qadon.h>
-#include "objects.h"
+//#include "./includes/objects/rdoh.h"
+//#include "./includes/objects/rdoh_util.h"
 
 
 /* Initialize Interface Globals
@@ -48,6 +49,7 @@ bool object_save_button_active = false;
 /* Engine Globals
 *
 */
+std::map<std::string,std::any> objects_library;
 
 // Frame Rate Variables
 float dt = 0;
@@ -65,12 +67,12 @@ PhysicsEngine physics_engine;
 CollisionEngine collision_engine;
 EngineInterface engine_interface;
 
-
-// Object Variables
-ObjectHandler object_handler;
+// Object variables
+RDOH object_handler;
+RdohUtil object_util;
 
 // GameObject Testing
-std::unique_ptr<Bird> bird_ptr( new Bird() );
+//std::unique_ptr<Bird> bird_ptr( new Bird() );
 std::unique_ptr<TestPlatform> platform_ptr ( new TestPlatform() );
 std::unique_ptr<TestPlatform> platform_ptr_2 ( new TestPlatform() );
 std::unique_ptr<TestPlatform> platform_ptr_3 ( new TestPlatform() );
