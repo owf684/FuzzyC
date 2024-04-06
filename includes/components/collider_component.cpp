@@ -17,9 +17,6 @@
 
 #include "collider_component.h"
 
-
-
-
 // Constructor
 ColliderComponent::ColliderComponent()
 {
@@ -129,3 +126,22 @@ void ColliderComponent::reset()
 }
 
 
+/* Function: in_rect()
+*
+* Purpose: This function
+* returns true if given x, y coords
+* are with in the boxes rect
+*/
+
+bool ColliderComponent::in_rect(float x, float y)
+{
+    if ( x > left() && x < right())
+    {   
+        if (y > top() && y < bottom())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}

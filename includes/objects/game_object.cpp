@@ -29,7 +29,7 @@ using namespace std;
 *
 */
 
-void GameObject::update(InputEngine& input_engine)
+void GameObject::update()
 {
 }
 
@@ -52,4 +52,6 @@ void GameObject::set_position(int x, int y)
     // update collider
     collider.box.x = x; collider.box.y = y;
 }
+
+
 

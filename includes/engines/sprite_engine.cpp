@@ -10,6 +10,7 @@
 */
 
 #include "sprite_engine.h"
+#include "engine_globals.h"
 
 
 

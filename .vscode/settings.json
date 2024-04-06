@@ -24,6 +24,11 @@
             "cwd": "/home/christophercorona/FuzzyC",
             "binaryPath": "/home/christophercorona/FuzzyC/fuzzy_test",
             "binaryArgs": []
+        },
+        {
+            "cwd": "/home/ccorona/FuzzyC",
+            "binaryPath": "/home/ccorona/FuzzyC/fuzzy_engine",
+            "binaryArgs": []
         }
     ],
     "makefile.buildLog": "./",
@@ -107,6 +112,14 @@
         "utility": "cpp",
         "stop_token": "cpp",
         "thread": "cpp",
-        "cinttypes": "cpp"
-    }
+        "cinttypes": "cpp",
+        "filesystem": "cpp",
+        "__tree": "cpp",
+        "codecvt": "cpp",
+        "fstream": "cpp",
+        "map": "cpp",
+        "stack": "cpp",
+        "any": "cpp"
+    },
+    "C_Cpp.dimInactiveRegions": false
 }

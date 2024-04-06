@@ -1,7 +1,7 @@
+#pragma once
 #ifndef INPUT_ENGINE_H
 #define INPUT_ENGINE_H
 #include <SDL2/SDL.h>
-
 
 
 class InputEngine{
@@ -25,7 +25,8 @@ class InputEngine{
 	} awsd;
 
 	bool quit;
-	
+	bool left_click;
+	bool right_click;
 
 	SDL_Event events;
 

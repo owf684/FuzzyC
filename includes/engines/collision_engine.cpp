@@ -23,6 +23,7 @@
 */
 
 #include "collision_engine.h"
+#include "engine_globals.h"
 
 
 /* Function: update()
@@ -34,16 +35,10 @@
 * all arguments must be unique_ptrs to derived game_objects
 */
 
-InputEngine input_ec;
 
 
-void CollisionEngine::update(std::unique_ptr<GameObject>& object, 
-                             std::vector< std::unique_ptr<GameObject> >& render_buffer,
-                             InputEngine& input_engine) 
+void CollisionEngine::update(std::unique_ptr<GameObject>& object) 
 {
-    // update inputs
-    input_ec = input_engine;
-
     // reset colliders
     object->collider.reset();
 
@@ -57,7 +52,7 @@ void CollisionEngine::update(std::unique_ptr<GameObject>& object,
 
     int i  = 0;
 
-    for(auto& other : render_buffer)
+    for(auto& other : graphics_engine.render_buffer)
     {
         left_collision(object, other);
         right_collision(object,other);        

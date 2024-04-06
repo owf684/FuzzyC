@@ -7,3 +7,6 @@ about unique ptrs
 // demo 2
 I have finally figured out how to do collisions well using actual physics and boundary overlap 
 Calculations. The collision are way more robust than they've ever been
+
+// demo 3
+After much experimentation I finally figured out the best course of action for UI integration was using IMGUI. In this demo I show case the ability to add objects to the scene by clicking around. The ui seen was all built using IMGUI. Thank you Chat GPT

@@ -10,6 +10,7 @@
 */
 
 #include "physics_engine.h"
+#include "engine_globals.h"
 
 
 
@@ -22,7 +23,7 @@
 *
 */
 
-void PhysicsEngine::update(std::unique_ptr<GameObject>& object,InputEngine& input_engine, float dt)
+void PhysicsEngine::update(std::unique_ptr<GameObject> &object)
 {
 
 

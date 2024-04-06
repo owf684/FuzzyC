@@ -1,0 +1,11 @@
+{
+cpp_file : ./game_data/objects/another_one.cpp
+draw_layer : 1
+sprite_2 : None
+h_file : ./game_data/objects/another_one.h
+sprite_4 : None
+sprite_3 : None
+sprite_1 : None
+current_sprite : bird.bmp
+object_name : another_one
+}

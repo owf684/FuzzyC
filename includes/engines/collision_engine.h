@@ -1,19 +1,16 @@
+#pragma once
 #ifndef COLLISION_ENGINE_H
 #define COLLISION_ENGINE_H
 
-#include "../objects/game_object.h"
-#include "../engines/input_engine.h"
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <vector>
 #include <memory>
-
-class CollisionEngine{
+#include "game_object.h"
+class CollisionEngine {
 
     public:
-    void  update(std::unique_ptr<GameObject>& object, 
-    std::vector<std::unique_ptr<GameObject> >& render_buffer,
-    InputEngine& input_engine);
+    void  update(std::unique_ptr<GameObject>& object);
 
 
     private:
