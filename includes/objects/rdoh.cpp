@@ -1,14 +1,14 @@
 #include "rdoh.h"
 #include "engine_globals.h"
 #include "bird.h"
-#include "Chris.h"
+#include "test_platform.h"
 
 
 
 void RDOH::init_objects() 
  { 
 	 object_library["bird"] = bird(); 
-	 object_library["Chris"] = Chris(); 
+	 object_library["test_platform"] = test_platform(); 
 } 
 
 
@@ -20,8 +20,8 @@ void RDOH::generate_object(std::string object_name, ImVec2 mouse_position) {
 		 graphics_engine.render_buffer[graphics_engine.render_buffer.size()-1]->set_position(mouse_position.x,mouse_position.y);
 	}
 
-	if (object_name == "Chris") { 
-		Chris anyObj = std::any_cast<Chris>(object_library["Chris"]); 
+	if (object_name == "test_platform") { 
+		test_platform anyObj = std::any_cast<test_platform>(object_library["test_platform"]); 
 		 graphics_engine.render_buffer.push_back(std::move(anyObj.generate_object())); 
 		 graphics_engine.render_buffer[graphics_engine.render_buffer.size()-1]->set_position(mouse_position.x,mouse_position.y);
 	}
