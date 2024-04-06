@@ -34,11 +34,8 @@ EngineInterface::EngineInterface()
     ImGui_ImplSDL2_InitForSDLRenderer(graphics_engine.window, graphics_engine.renderer);
     ImGui_ImplSDLRenderer2_Init(graphics_engine.renderer);
 
-
-    // Our state
-
-    //ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 }
+
 void EngineInterface::update()
 {
     ImGui_ImplSDLRenderer2_NewFrame();
@@ -114,25 +111,48 @@ void EngineInterface::object_contorls(){
             }
         }
         ImGui::SameLine();
+ 
         if (ImGui::Button("Remove Object"))
         {
+            object_util.remove_object(selected_object);
+            system("make all; ./restart_engine.sh&");
+        }
+                
+        if (ImGui::BeginCombo("object library",selected_object))
+        {
+    
+            for (auto&objs: object_util.obj_lib)
+            {
+                bool is_selected = (selected_object == objs.c_str());
 
+                if (ImGui::Selectable(objs.c_str(), is_selected))
+                {
+                    selected_object = objs.c_str();
+                }
+                if (is_selected)
+                {
+                    ImGui::SetItemDefaultFocus();
+                }
+            }
+
+            ImGui::EndCombo();
         }
 
-        ImGui::Checkbox("Place Objects", &place_object_enabled);
+        ImGui::Checkbox("Make Object Placeable", &place_object_enabled);
         
         if (place_object_enabled)
         {
             if (input_engine.left_click && !already_placed) //bug here when clicking on other menu items objects are placed!
             {
                 already_placed = true;
-                object_handler.generate_object("Chris",ImGui::GetMousePos());
+                object_handler.generate_object(selected_object,ImGui::GetMousePos());
             
             } else if (!input_engine.left_click && already_placed)
             {
                 already_placed = false;
             }
         } 
+
 
     ImGui::End();
 }
@@ -172,16 +192,16 @@ void EngineInterface::add_object_menu()
         const char* items[] = {"Background","Mid-Background","Mid-Foreground","ForeGround"};
         ImGui::Combo("Draw Layer", &object_info.draw_layer_index,items,IM_ARRAYSIZE(items));
 
-        if (ImGui::BeginCombo("Default Sprite",object_info.defaut_sprite))
+        if (ImGui::BeginCombo("Default Sprite",object_info.default_sprite))
         {
 
             for (auto&asset_item : object_info.available_assets)
             {
-                bool is_selected = (object_info.defaut_sprite == asset_item.c_str());
+                bool is_selected = (object_info.default_sprite == asset_item.c_str());
 
                 if (ImGui::Selectable(asset_item.c_str(), is_selected))
                 {
-                    object_info.defaut_sprite = asset_item.c_str();
+                    object_info.default_sprite = asset_item.c_str();
                 }
                 if (is_selected)
                 {
@@ -194,12 +214,11 @@ void EngineInterface::add_object_menu()
         if (ImGui::Button("Save"))
         {
             show_add_object_menu = false;
-            object_util.create_object_files(object_info.object_name,object_info.defaut_sprite);
+            object_util.create_object_files(object_info.object_name,object_info.default_sprite);
             object_util.add_object(object_info.object_name);
             system("make all; ./restart_engine.sh&");
-        
-            // process data 
         }
+
         ImGui::SameLine();
         if (ImGui::Button("Cancel"))
         {

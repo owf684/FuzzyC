@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <filesystem>
-
+#include <qadon.h>
 class EngineInterface {
 
     public: 
@@ -24,8 +24,11 @@ class EngineInterface {
             char object_name[256];
             int draw_layer_index;
             std::vector<std::string> available_assets;
-            const char* defaut_sprite;
+            const char* default_sprite;
         }object_info;
+
+        const char* selected_object;
+
     
 };
 #endif
