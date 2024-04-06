@@ -2,6 +2,8 @@
 #include "rdoh_util.h"
 
 
+
+
 std::string strupper(std::string word)
 {
     std::string temp = "";
@@ -12,6 +14,16 @@ std::string strupper(std::string word)
     return temp;
 
 }
+
+void RdohUtil::init()
+{   obj_lib.clear();
+    qadon q_obj_lib("./includes/objects/object_library.qadon");
+	for (auto& pair : q_obj_lib)
+	{
+		obj_lib.push_back(pair.second);
+	}
+}
+
 void RdohUtil::write_rdoh()
 {
     std::ofstream rdoh_cpp(rdoh_file_path);
@@ -33,6 +45,28 @@ void RdohUtil::add_object(std::string object_name)
     create_generate_object(rdoh_cpp,obj_lib);
     rdoh_cpp.close();
     
+}
+
+void RdohUtil::remove_object(std::string object_name)
+{
+    std::ofstream rdoh_cpp(rdoh_file_path);
+    qadon obj_lib(object_lib_path);
+    obj_lib.remove(object_name);
+    obj_lib.write(object_lib_path);
+    create_headers(rdoh_cpp,obj_lib);
+    create_init_objects(rdoh_cpp, obj_lib);
+    create_generate_object(rdoh_cpp,obj_lib);
+    rdoh_cpp.close();
+    std::string command_1 = "rm ./game_data/objects/"+object_name+".cpp";
+    const char* sys_command_1 = command_1.c_str();
+    std::string command_2 = "rm ./game_data/objects/"+object_name+".h";
+    const char* sys_command_2 = command_2.c_str();
+        std::string command_3 = "rm ./game_data/objects/"+object_name+".o";
+    const char* sys_command_3 = command_3.c_str();
+    system(sys_command_1);
+    system(sys_command_2);
+    system(sys_command_3);
+
 }
 
 void RdohUtil::set_rdoh_file_path(std::string file_path)
