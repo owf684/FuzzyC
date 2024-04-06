@@ -21,6 +21,7 @@ class EngineInterface {
         bool place_object_enabled;
         bool erase_object_enabled;
         bool already_placed; 
+        bool view_grid;
         struct  {
             char object_name[256];
             int draw_layer_index;

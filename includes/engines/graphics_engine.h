@@ -15,9 +15,10 @@ class GraphicsEngine
 {
 public: // Constructor 
 	GraphicsEngine(int input_width, int input_height, int input_bpp);
-
+	void draw_grid();
 	int width;
 	int height;
+	int grid_size;
 	int bpp;
 	SDL_Surface* screen;
 	SDL_Window* window; 
