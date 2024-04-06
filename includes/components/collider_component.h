@@ -34,6 +34,7 @@ class ColliderComponent{
     int center_x();
     int center_y();
     void reset();
+    bool in_rect(float x, float y);
     private:
 
 };
