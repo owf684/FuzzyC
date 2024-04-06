@@ -71,14 +71,5 @@ EngineInterface engine_interface;
 RDOH object_handler;
 RdohUtil object_util;
 
-// GameObject Testing
-//std::unique_ptr<Bird> bird_ptr( new Bird() );
-std::unique_ptr<TestPlatform> platform_ptr ( new TestPlatform() );
-std::unique_ptr<TestPlatform> platform_ptr_2 ( new TestPlatform() );
-std::unique_ptr<TestPlatform> platform_ptr_3 ( new TestPlatform() );
-std::unique_ptr<TestPlatform> platform_ptr_4 ( new TestPlatform() );
-std::unique_ptr<TestPlatform> platform_ptr_5 ( new TestPlatform() );
-
-
 
 #endif 
