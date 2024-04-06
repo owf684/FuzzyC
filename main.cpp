@@ -7,50 +7,21 @@ using namespace std::chrono;
 int main(int argc, char* argv[])
 {
 
-
-// creating a test game object
-//bird_ptr->set_position(300,370);
-
-// setting position ---> need function in gameobject that repositions all the components
-platform_ptr->set_position(300,400);
-platform_ptr->physics.pause = true;
-platform_ptr->physics.mass = 100000;
-
-platform_ptr_2->set_position(450,350);
-platform_ptr_2->physics.pause = true;
-platform_ptr_2->physics.mass = 100000;
-
-platform_ptr_3->set_position(150,350);
-platform_ptr_3->physics.pause = true;
-platform_ptr_3->physics.mass = 100000;
-
-platform_ptr_4->set_position(300,250);
-platform_ptr_4->physics.pause = true;
-platform_ptr_4->physics.mass = 100000;
-
-// adding it to the render buffer
-//graphics_engine.render_buffer.push_back(std::move(bird_ptr));
-graphics_engine.render_buffer.push_back(std::move(platform_ptr));
-graphics_engine.render_buffer.push_back(std::move(platform_ptr_2));
-graphics_engine.render_buffer.push_back(std::move(platform_ptr_3));
-graphics_engine.render_buffer.push_back(std::move(platform_ptr_4));
-
 bool first_pass = true;
 
 object_handler.init_objects();
 object_util.set_object_lib_path("./includes/objects/object_library.qadon");
 object_util.set_rdoh_file_path("./includes/objects/rdoh.cpp");
-std::unique_ptr<GameObject> object;
+object_util.init();
 
+std::unique_ptr<GameObject> object;
 
 // main game loop 
 while(!input_engine.quit)
 {	
 	// capture current time
-	auto dt_start = high_resolution_clock::now();
+	auto dt_start = high_resolution_clock::now();	
 	
-	
-
 	graphics_engine.update();
 	input_engine.update();
 
@@ -59,7 +30,6 @@ while(!input_engine.quit)
 		// update engines
 		
 		// update all objects
-		//for(auto& object: graphics_e.render_buffer)
 		for(int i =0; i < graphics_engine.render_buffer.size(); i++)
 		{	
 			// move out of buffer
@@ -80,7 +50,6 @@ while(!input_engine.quit)
 			if (first_pass) first_pass = false;
 		}
 	}
-
 
 	// update delta time step
 	usleep((1.0 / frames_per_second_f)*micro_seconds_f);
