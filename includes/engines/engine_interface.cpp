@@ -88,9 +88,13 @@ void EngineInterface::engine_controls(){
     }
 
     // second line -- fps controls
+    ImGui::SetNextItemWidth(128);
     ImGui::SliderFloat("FPS",&frames_per_second_f,60.0,120.0);
 
-
+    ImGui::SetNextItemWidth(128);
+    ImGui::SliderInt("Grid Size", &graphics_engine.grid_size, 8, 128);
+    ImGui::SameLine();
+    ImGui::Checkbox("View Grid", &view_grid);
     
     ImGui::End();
 }

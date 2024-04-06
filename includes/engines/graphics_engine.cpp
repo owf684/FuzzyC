@@ -32,6 +32,7 @@ GraphicsEngine::GraphicsEngine(int input_width,int input_height, int input_bpp)
 	SDL_SetWindowPosition(window,0,0);
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
+	grid_size = 32;
 
 }
 
@@ -46,10 +47,9 @@ void GraphicsEngine::update()
 	SDL_SetRenderDrawColor(renderer, (Uint8)(scene_color.x * 255), (Uint8)(scene_color.y * 255), (Uint8)(scene_color.z * 255), (Uint8)(scene_color.w * 255));;
     SDL_RenderClear(renderer);
 	
+	if (engine_interface.view_grid) draw_grid();
+
 	for (int i = 0; i < render_buffer.size(); i++) {
-    
-
-
 
     	// Convert the surface to a texture
     	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, render_buffer[i]->sprite.current);
@@ -69,10 +69,21 @@ void GraphicsEngine::update()
 	
 	SDL_RenderPresent(renderer);
 
-
-
-
 }
+
+
+void GraphicsEngine::draw_grid() {
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Set color to white
+    // Draw vertical lines
+    for (int x = 0; x <= width; x += grid_size) {
+        SDL_RenderDrawLine(renderer, x, 0, x, height);
+    }
+    // Draw horizontal lines
+    for (int y = 0; y <=height; y += grid_size) {
+        SDL_RenderDrawLine(renderer, 0, y, width, y);
+    }
+}
+
 
 
 
