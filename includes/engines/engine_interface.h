@@ -19,6 +19,7 @@ class EngineInterface {
         // bools 
         bool show_add_object_menu;
         bool place_object_enabled;
+        bool erase_object_enabled;
         bool already_placed; 
         struct  {
             char object_name[256];
