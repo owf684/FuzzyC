@@ -1,20 +1,20 @@
-#ifndef TEST_PLATFORM_H
+#ifndef TEST_PLATFORM_H 
 #define TEST_PLATFORM_H
-
 #include "engine_globals.h"
 
-class TestPlatform : public GameObject{
 
-public:
-    void update() override;
-    TestPlatform();
-    std::unique_ptr<GameObject> generate_object() 
-        {
-            std::unique_ptr<TestPlatform> object(new TestPlatform);
+class  test_platform: public GameObject 
+{ 
+	public:
+		test_platform();
 
-            return  object;
-        }
-        
+		std::unique_ptr<test_platform> generate_object() { 
+			std::unique_ptr<test_platform> object( new test_platform);
+			return  object;
+		}
+
+
+		void update() override;
+
 };
-
 #endif

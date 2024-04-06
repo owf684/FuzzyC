@@ -1,14 +1,17 @@
 #include "test_platform.h"
+#include "iostream"
+using namespace std;
 
 
-TestPlatform::TestPlatform()
+test_platform::test_platform()
 {
-    sprite.set_current("./game_data/assets/test_platform.bmp");
-    object_id = 1;
+	sprite.set_current("./game_data/assets/test_platform.bmp"); 
+	physics.pause = true;
 }
 
-void TestPlatform::update()
-{
- // do stuff here
-}
 
+	void test_platform::update()
+{
+
+
+}
