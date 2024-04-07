@@ -7,6 +7,7 @@
 #include "./engines/sprite_engine.h"
 #include "./engines/physics_engine.h"
 #include "./engines/collision_engine.h"
+#include "./engines/scroll_engine.h"
 #include "./objects/game_object.h"
 #include "./objects/rdoh.h"
 #include "./objects/rdoh_util.h"
@@ -20,6 +21,7 @@ extern InputEngine input_engine;
 extern SpriteEngine sprite_engine;
 extern PhysicsEngine physics_engine;
 extern CollisionEngine collision_engine;
+extern ScrollEngine scroll_engine;
 
 // frame rate globals
 extern float dt;
