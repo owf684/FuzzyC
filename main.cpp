@@ -41,14 +41,18 @@ while(!input_engine.quit)
 			physics_engine.update(object);
 			collision_engine.update(object);
 			sprite_engine.update(object);
-
+			scroll_engine.update(object);
+			
 			// move back into buffer
   			std::vector< std::unique_ptr<GameObject> >::iterator it;
 			it = graphics_engine.render_buffer.begin();
 			graphics_engine.render_buffer.insert(it, std::move(object));
 
 			if (first_pass) first_pass = false;
-		}
+		} 
+	} else if (!play_pause)
+	{
+		scroll_engine.move_world();
 	}
 
 	// update delta time step

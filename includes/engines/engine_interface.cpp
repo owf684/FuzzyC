@@ -91,11 +91,23 @@ void EngineInterface::engine_controls(){
     ImGui::SetNextItemWidth(128);
     ImGui::SliderFloat("FPS",&frames_per_second_f,60.0,120.0);
 
+    // third line -- grid controls
     ImGui::SetNextItemWidth(128);
     ImGui::SliderInt("Grid Size", &graphics_engine.grid_size, 8, 128);
     ImGui::SameLine();
     ImGui::Checkbox("View Grid", &view_grid);
     
+    // fourth line -- move world controls
+    ImGui::SetNextItemWidth(128);
+    ImGui::SliderInt("Move Speed",&scroll_engine.move_speed,1,32);
+    ImGui::SameLine();
+    ImGui::Checkbox("Move World", &move_world_enabled);
+    ImGui::SameLine();
+    if ( ImGui::Button("Set to Zero") )
+    {
+        set_to_zero = true;
+    }
+
     ImGui::End();
 }
 
