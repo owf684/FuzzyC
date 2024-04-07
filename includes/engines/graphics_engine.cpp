@@ -28,8 +28,9 @@ GraphicsEngine::GraphicsEngine(int input_width,int input_height, int input_bpp)
 	
 	
     SDL_Init(SDL_INIT_EVERYTHING);
-    SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_RESIZABLE, &window, &renderer);
+    SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_FULLSCREEN_DESKTOP, &window, &renderer);
 	SDL_SetWindowPosition(window,0,0);
+	SDL_SetWindowResizable(window, SDL_TRUE);
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
 	grid_size = 32;
@@ -74,14 +75,30 @@ void GraphicsEngine::update()
 
 void GraphicsEngine::draw_grid() {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Set color to white
-    // Draw vertical lines
-    for (int x = 0; x <= width; x += grid_size) {
-        SDL_RenderDrawLine(renderer, x, 0, x, height);
+
+	// draws horizontal grid lines above 0 
+	for (int x =0; x <= width-scroll_engine.accumulated_x; x += grid_size) {
+        SDL_RenderDrawLine(renderer, x+scroll_engine.accumulated_x, 0, x+scroll_engine.accumulated_x, height);
     }
-    // Draw horizontal lines
-    for (int y = 0; y <=height; y += grid_size) {
-        SDL_RenderDrawLine(renderer, 0, y, width, y);
+
+	
+	// draws horizontal grid lines below 0
+	for (int x =0; x <= width+scroll_engine.accumulated_x; x += grid_size) {
+        SDL_RenderDrawLine(renderer, scroll_engine.accumulated_x - x, 0, scroll_engine.accumulated_x-x, height);
+	}
+	
+	
+	
+    // draws vertical grid lines below 
+    for (int y = 0; y <=height-scroll_engine.accumulated_y; y += grid_size) {
+        SDL_RenderDrawLine(renderer, 0, y+scroll_engine.accumulated_y, width, y+scroll_engine.accumulated_y);
     }
+
+	// draws vertical grid lines above
+	for (int y = 0; y <=height+scroll_engine.accumulated_y; y += grid_size) {
+        SDL_RenderDrawLine(renderer, 0, scroll_engine.accumulated_y-y, width, scroll_engine.accumulated_y-y);
+    }
+
 }
 
 
