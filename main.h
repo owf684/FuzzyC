@@ -66,6 +66,7 @@ SpriteEngine sprite_engine;
 PhysicsEngine physics_engine;
 CollisionEngine collision_engine;
 EngineInterface engine_interface;
+ScrollEngine scroll_engine; 
 
 // Object variables
 RDOH object_handler;
