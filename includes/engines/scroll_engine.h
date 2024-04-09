@@ -13,6 +13,10 @@ class ScrollEngine {
         int move_speed;
         int accumulated_y;
         int accumulated_x;
+        bool scroll_x_position;
+        float scroll_x_velocity;
+        float left_x_scroll_threshold;
+        float right_x_scroll_threshold;
 };
 
 
