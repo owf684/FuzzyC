@@ -5,6 +5,7 @@
 #include "../components/sprite_component.h"
 #include "../components/physics_component.h"
 #include "../components/collider_component.h"
+#include "../components/camera_component.h"
 #include <memory>
 
 class GameObject{
@@ -15,6 +16,8 @@ class GameObject{
     PhysicsComponent physics;
 
     ColliderComponent collider;
+
+    CameraComponent camera;
 
     int object_id;
 
