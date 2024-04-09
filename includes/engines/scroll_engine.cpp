@@ -5,6 +5,13 @@
 
 void ScrollEngine::update(std::unique_ptr<GameObject> &object)
 {
+    if (scroll_x_position)
+    {
+        if (!object->camera.camera_active)
+        {
+            object->physics.position.x = (object->physics.position.x - scroll_x_velocity*dt - 0.5*(object->physics.force.x/object->physics.mass)*pow(dt,2));
+        }
+    }
 
 }
 
