@@ -58,7 +58,7 @@ void EngineInterface::main_menu(){
     engine_controls();
     scene_controls();
     object_contorls();
-
+    camera_controls();
     // non-viewable menus at engine startup 
     if (show_add_object_menu) add_object_menu();
 
@@ -263,5 +263,32 @@ void EngineInterface::add_object_menu()
             show_add_object_menu = false;
             // don't process data;
         }
+    ImGui::End();
+}
+
+
+void EngineInterface::camera_controls(){
+    ImGui::Begin("Camera Controls");
+    ImGui::Checkbox("Select Object to Follow",&select_follow_object);
+    if (select_follow_object)
+    {
+        if (input_engine.left_click)
+            {
+                for (auto& objects : graphics_engine.render_buffer)
+                {
+                    if (objects->collider.in_rect(ImGui::GetMousePos().x, ImGui::GetMousePos().y))
+                    {
+                        objects->camera.camera_active = true;
+                        select_follow_object = false;
+                    } else {
+                        objects->camera.camera_active = false;
+                    }
+                }
+            } 
+
+    }
+    ImGui::SliderFloat("x-axis left scroll threshold",&scroll_engine.left_x_scroll_threshold,graphics_engine.width/2,graphics_engine.width);
+     ImGui::SliderFloat("x-axis RIGHT scroll threshold",&scroll_engine.right_x_scroll_threshold,0,graphics_engine.width/2);
+
     ImGui::End();
 }

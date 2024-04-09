@@ -14,6 +14,7 @@ class EngineInterface {
         void engine_controls();
         void object_contorls();
         void scene_controls();
+        void camera_controls();
         void object_view_inteface();
         void add_object_menu();
         // bools 
@@ -24,6 +25,7 @@ class EngineInterface {
         bool view_grid;
         bool move_world_enabled;
         bool set_to_zero;
+        bool select_follow_object;
         // ints
         int move_speed;
 
