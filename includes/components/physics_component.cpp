@@ -33,6 +33,8 @@ PhysicsComponent::PhysicsComponent()
  mass = 100.0;
  debug_enabled = false; 
  pause = false;
+ freeze_x_position = false;
+ freeze_y_position = false;
 
 }
 
@@ -92,10 +94,11 @@ void PhysicsComponent::calculate_velocity(float dt)
   
   if (dt < 0) throw frame_time_error();
 
-  velocity.x += acceleration.x*dt;
+  if (!freeze_x_position) velocity.x += acceleration.x*dt;
+  else velocity.x = 0;
 
-  velocity.y +=  acceleration.y*dt;
-
+  if (!freeze_y_position) velocity.y +=  acceleration.y*dt;
+  else velocity.y = 0;
  
 }
 
