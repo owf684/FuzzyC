@@ -17,6 +17,7 @@ class ScrollEngine {
         float scroll_x_velocity;
         float left_x_scroll_threshold;
         float right_x_scroll_threshold;
+        float last_x_position;
 };
 
 
