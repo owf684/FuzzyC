@@ -22,7 +22,7 @@ void CameraEngine::update(std::unique_ptr<GameObject> &object)
         } else{
             object->physics.freeze_x_position = false;
             scroll_engine.scroll_x_position = false;
-            scroll_engine.scroll_x_velocity = object->physics.velocity.x;
+            scroll_engine.scroll_x_velocity = 0;//object->physics.velocity.x;
 
         }
 
