@@ -287,8 +287,13 @@ void EngineInterface::camera_controls(){
             } 
 
     }
+    ImGui::SetNextItemWidth(128);
     ImGui::SliderFloat("x-axis left scroll threshold",&scroll_engine.left_x_scroll_threshold,graphics_engine.width/2,graphics_engine.width);
-     ImGui::SliderFloat("x-axis RIGHT scroll threshold",&scroll_engine.right_x_scroll_threshold,0,graphics_engine.width/2);
-
+    ImGui::SetNextItemWidth(128);
+    ImGui::SliderFloat("x-axis right scroll threshold",&scroll_engine.right_x_scroll_threshold,0,graphics_engine.width/2);
+    ImGui::SetNextItemWidth(128);
+    ImGui::SliderFloat("y-axis up scroll threshold",&scroll_engine.up_y_scroll_threshold,0,graphics_engine.height/2);
+    ImGui::SetNextItemWidth(128);
+    ImGui::SliderFloat("y-axis down scroll threshold",&scroll_engine.down_y_scroll_threshold,graphics_engine.height/2,graphics_engine.height);
     ImGui::End();
 }

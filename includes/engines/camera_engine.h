@@ -8,14 +8,7 @@ class CameraEngine {
     public:
         CameraEngine();
         void update(std::unique_ptr<GameObject> &object);
-        bool capture_x_velocity;
-        float x_velocity_capture;
-        struct direction
-        {
-            bool left;
-            bool right;
-        };
-        direction current_direction;
+        void handle_camera(std::unique_ptr<GameObject> &object);
 };
 
 #endif
