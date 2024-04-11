@@ -3,8 +3,32 @@
 #include "interface_globals.h"
 #include <iostream>
 
+
+ScrollEngine::ScrollEngine()
+{
+    left_x_scroll_threshold = graphics_engine.width/2;
+    right_x_scroll_threshold = graphics_engine.width/4;
+    up_y_scroll_threshold = graphics_engine.width/4;
+    down_y_scroll_threshold = graphics_engine.width/2;
+}
 void ScrollEngine::update(std::unique_ptr<GameObject> &object)
 {
+    if (scroll_x_position)
+    {
+        if (!object->camera.camera_active)
+        {
+            object->physics.position.x = (object->physics.position.x - scroll_x_velocity*dt - 0.5*(object->physics.force.x/object->physics.mass)*pow(dt,2));
+        } 
+    }
+
+    if (scroll_y_position)
+    {
+        if (!object->camera.camera_active)
+        {
+            object->physics.position.y = (object->physics.position.y - scroll_y_velocity*dt - 0.5*(object->physics.force.y/object->physics.mass)*pow(dt,2));
+        } 
+    }
+    
 
 }
 

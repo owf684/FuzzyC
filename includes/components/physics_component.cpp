@@ -33,6 +33,8 @@ PhysicsComponent::PhysicsComponent()
  mass = 100.0;
  debug_enabled = false; 
  pause = false;
+ freeze_x_position = false;
+ freeze_y_position = false;
 
 }
 
@@ -93,9 +95,8 @@ void PhysicsComponent::calculate_velocity(float dt)
   if (dt < 0) throw frame_time_error();
 
   velocity.x += acceleration.x*dt;
-
   velocity.y +=  acceleration.y*dt;
-
+ 
  
 }
 
@@ -118,9 +119,9 @@ void PhysicsComponent::calculate_position(float dt)
   
   if (dt < 0) throw frame_time_error();
   
-  position.x = position.x + velocity.x*dt + 0.5*acceleration.x*pow(dt,2);
+  if (!freeze_x_position) position.x = position.x + velocity.x*dt + 0.5*acceleration.x*pow(dt,2);
 
-  position.y = position.y + velocity.y*dt + 0.5*acceleration.y*pow(dt,2);  
+  if (!freeze_y_position) position.y = position.y + velocity.y*dt + 0.5*acceleration.y*pow(dt,2);  
 }
 
 /* Function: calculate_impulse()

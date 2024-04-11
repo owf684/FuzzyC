@@ -44,6 +44,9 @@ class PhysicsComponent
 
    bool pause; 
    
+   bool freeze_x_position;
+
+   bool freeze_y_position;
    // helper functions
    void update(float dt);
 

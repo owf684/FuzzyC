@@ -42,7 +42,7 @@ while(!input_engine.quit)
 			collision_engine.update(object);
 			sprite_engine.update(object);
 			scroll_engine.update(object);
-			
+			camera_engine.update(object);
 			// move back into buffer
   			std::vector< std::unique_ptr<GameObject> >::iterator it;
 			it = graphics_engine.render_buffer.begin();
