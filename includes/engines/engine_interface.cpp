@@ -1,3 +1,15 @@
+/* Program: Engine Interface
+*
+* Pupose: The engine_interface builds the IMGUI windows used to interface with the game engine.
+* It also provides all the engine interface logic for every feature seen in the UI
+*
+* Author: Christopher Corona
+*
+* Version: v0.1.0
+*
+* TODO:
+*/
+
 #include "engine_interface.h"
 #include "interface_globals.h"
 #include "engine_globals.h"
@@ -11,9 +23,7 @@
 
 
 
-// debugging
-const char* items_2[] = {"A","B","C","D"};
-
+// Constructors 
 EngineInterface::EngineInterface()
 {
     // Setup Dear ImGui context
@@ -36,6 +46,13 @@ EngineInterface::EngineInterface()
 
 }
 
+/* Function: update
+* 
+*  Purpose: Calls the ImGUI
+*  draw logic. To add more ui
+*  simpy place imgui code
+*  in between the frame and draw calls
+*/
 void EngineInterface::update()
 {
     ImGui_ImplSDLRenderer2_NewFrame();
@@ -51,8 +68,12 @@ void EngineInterface::update()
 }
 
 
-
-
+/* Function: main_menu
+*
+* Purpose: This function calls
+* the sub-menu functions that make
+* up the main menu
+*/
 void EngineInterface::main_menu(){
 
     engine_controls();
@@ -64,11 +85,15 @@ void EngineInterface::main_menu(){
 
 }
 
-
+/* Function: engine_controls
+*
+* Purpose: This function draws the engine 
+* controls window and contains the engine controls
+* logic 
+*/
 void EngineInterface::engine_controls(){
     ImGui::Begin("Engine Controls");
     
-
     // first line -- button controls
     if (play_pause){
         if (ImGui::Button("Pause"))
@@ -96,7 +121,9 @@ void EngineInterface::engine_controls(){
     ImGui::SliderInt("Grid Size", &graphics_engine.grid_size, 8, 128);
     ImGui::SameLine();
     ImGui::Checkbox("View Grid", &view_grid);
-    
+    ImGui::SameLine();
+    ImGui::Checkbox("Snap to Grid", &snap_to_grid);
+
     // fourth line -- move world controls
     ImGui::SetNextItemWidth(128);
     ImGui::SliderInt("Move Speed",&scroll_engine.move_speed,1,32);
@@ -111,7 +138,12 @@ void EngineInterface::engine_controls(){
     ImGui::End();
 }
 
-
+/* Function: object_controls
+*
+* Purpose: This function draws the 
+* object controls window and contrains
+* the object controls logic
+*/
 void EngineInterface::object_contorls(){
     ImGui::Begin("Object Controls");
         if (ImGui::Button("Add Object"))
@@ -160,8 +192,65 @@ void EngineInterface::object_contorls(){
         {
             if (input_engine.left_click && !already_placed && selected_object != NULL) //bug here when clicking on other menu items objects are placed!
             {
+
                 already_placed = true;
-                object_handler.generate_object(selected_object,ImGui::GetMousePos());
+
+                // snap object to grid logic 
+                if (snap_to_grid)
+                {
+                    // do some simple maths
+                    int x_ref = ImGui::GetMousePos().x;
+                    int x_pos = ImGui::GetMousePos().x;
+                    int y_ref = ImGui::GetMousePos().y;
+                    int y_pos = ImGui::GetMousePos().y;
+
+                    // calculate x position factors
+                    int x_remainder = (x_pos ) % graphics_engine.grid_size;
+                    float grids_on_screen_xdim = scroll_engine.accumulated_x / graphics_engine.grid_size ;              // numbers of grids
+                    float fractional_grid_size_on_screen_xdim = (grids_on_screen_xdim - int(grids_on_screen_xdim));    // size of the last grid
+                    int grid_offset_xdim = fractional_grid_size_on_screen_xdim*graphics_engine.grid_size;              // used to adjust the x_pos
+
+                    // calculate the snapped x position
+                    x_pos = x_pos - x_remainder + grid_offset_xdim;
+
+                    // shift x_position if scrolled left and initial snap was off by a grid size in the -x direction
+                    if (x_ref < x_pos)
+                    {
+                        x_pos -= graphics_engine.grid_size;
+                    // shift x_position if scrolled right and initial snap was off by a grid size in the +x direction
+                    } else if (x_ref - x_pos > graphics_engine.grid_size)
+                    {
+                        x_pos += graphics_engine.grid_size;
+                    }
+                   
+                    // calculate y position factors
+                    int y_remainder = (y_pos ) % graphics_engine.grid_size;
+                    float grids_on_screen_ydim = scroll_engine.accumulated_y / graphics_engine.grid_size;
+                    float fractional_grid_size_on_screen_ydim = (grids_on_screen_ydim - int(grids_on_screen_ydim));
+                    int grid_offset_ydim = fractional_grid_size_on_screen_ydim*graphics_engine.grid_size;
+
+                    // calculate the snapped y position
+                    y_pos = y_pos - y_remainder + grid_offset_ydim;
+
+                    // shift y position if scrolled down and initial snap was off by a grid size in the +y direction
+                    if (y_ref < y_pos)
+                    {
+                        y_pos -= graphics_engine.grid_size;
+                    
+                    // shift y position if scrolled up and initial snap was off by a grid size in the -y direction
+                    } else if(y_ref - y_pos > graphics_engine.grid_size)
+                    {
+                        y_pos += graphics_engine.grid_size;
+                    }
+                    
+                    // save snapped positions 
+                    ImVec2 snapped_position(x_pos,y_pos);
+
+                    // create new object
+                    object_handler.generate_object(selected_object,snapped_position);
+
+
+                } else {object_handler.generate_object(selected_object,ImGui::GetMousePos());}
             
             } else if (!input_engine.left_click && already_placed)
             {
@@ -195,7 +284,11 @@ void EngineInterface::object_contorls(){
     ImGui::End();
 }
 
-
+/* Function: scene_controls
+*
+* Purpose: This function draws the scene controls
+* window and contains the scene controls logic
+*/
 void EngineInterface::scene_controls(){
     ImGui::Begin("Scene Controls");
     if (ImGui::Button("New Scene"))
@@ -214,13 +307,24 @@ void EngineInterface::scene_controls(){
 }
 
 
+/* Function: object_view_interface
+*
+* Purpose: undecided. coming soon
+*/
 void EngineInterface::object_view_inteface(){
 
 }
 
-
+/**************************************/
 // Non-Viewable Menus at Engine Startup
+/**************************************/
 
+/* Function: add_object_menu
+*
+* Purpose: This function draws the add_object_menu()
+* for this window to appear the show_add_object_menu
+* flag must be set true
+*/
 void EngineInterface::add_object_menu()
 {
 
@@ -266,7 +370,11 @@ void EngineInterface::add_object_menu()
     ImGui::End();
 }
 
-
+/* Function: camera_controls
+*
+* Purpose: This function draws the camera controls
+* window and contains the camera controls logic
+*/
 void EngineInterface::camera_controls(){
     ImGui::Begin("Camera Controls");
     ImGui::Checkbox("Select Object to Follow",&select_follow_object);
