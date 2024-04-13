@@ -10,3 +10,7 @@ Calculations. The collision are way more robust than they've ever been
 
 // demo 3
 After much experimentation I finally figured out the best course of action for UI integration was using IMGUI. In this demo I show case the ability to add objects to the scene by clicking around. The ui seen was all built using IMGUI. Thank you Chat GPT
+
+// demo 4
+At this point I have figured out how to add objects to the engine, scroll the game scene, simple camera functions, grid for snapping objects to it. This video showcases the scrolling grid during 
+Editing and playing

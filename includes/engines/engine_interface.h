@@ -26,6 +26,7 @@ class EngineInterface {
         bool move_world_enabled;
         bool set_to_zero;
         bool select_follow_object;
+        bool snap_to_grid;
         // ints
         int move_speed;
 
