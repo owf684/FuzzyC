@@ -16,7 +16,8 @@ SOURCES := ./main.cpp \
            $(wildcard $(GAMEOBJECTS)/*.cpp) \
 		   $(wildcard $(IMGUI)/*.cpp) \
 		   $(IMGUI)/backends/imgui_impl_sdl2.cpp \
-		   $(IMGUI)/backends/imgui_impl_sdlrenderer2.cpp
+		   $(IMGUI)/backends/imgui_impl_sdlrenderer2.cpp \
+		   $(INCLUDES)/tinyxml2.cpp 
 
 # List of object files
 OBJECTS := $(patsubst %.cpp, %.o, $(SOURCES))
