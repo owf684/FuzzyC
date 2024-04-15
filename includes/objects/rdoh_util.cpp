@@ -152,9 +152,12 @@ void RdohUtil::create_generate_object(std::ofstream &rdoh_file, qadon object_lib
         rdoh_file << "\t\t" + pair.second + " anyObj = std::any_cast<" + pair.second + ">(object_library[" + std::string(1,'"') + pair.second + std::string(1,'"') + "]); \n";
         rdoh_file << "\t\t graphics_engine.render_buffer.push_back(std::move(anyObj.generate_object())); \n";
         rdoh_file << "\t\t graphics_engine.render_buffer[graphics_engine.render_buffer.size()-1]->set_position(mouse_position.x,mouse_position.y);\n";
+        //rdoh_file << "\t\t graphics_engine.render_buffer[graphics_engine.render_buffer.size()-1]->set_init_position(mouse_position.x+scroll_engine.accumulated_x,mouse_position.y+scroll_engine.accumulated_y);\n";
+
         rdoh_file << "\t}\n\n";
     }
      // update object
+    rdoh_file << "\tgraphics_engine.render_buffer[graphics_engine.render_buffer.size()-1]->object_name = object_name;\n";
     rdoh_file << "\tauto object = std::move(graphics_engine.render_buffer.back());\n";
 	rdoh_file << "\tgraphics_engine.render_buffer.pop_back();\n";
     rdoh_file << "\tphysics_engine.update(object);\n";
