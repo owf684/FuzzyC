@@ -41,7 +41,7 @@ void GameObject::update()
 *
 */
 
-void GameObject::set_position(int x, int y)
+void GameObject::set_position(float x, float y)
 {
     // update physics
     physics.position.x = x; physics.position.y = y;
@@ -52,6 +52,5 @@ void GameObject::set_position(int x, int y)
     // update collider
     collider.box.x = x; collider.box.y = y;
 }
-
 
 

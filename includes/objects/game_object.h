@@ -19,9 +19,9 @@ class GameObject{
 
     CameraComponent camera;
 
-    int object_id;
+    std::string object_name;
 
-    void set_position(int x, int y);
+    void set_position(float x, float y);
     
     virtual void update();
   
