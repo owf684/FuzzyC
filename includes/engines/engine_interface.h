@@ -5,6 +5,7 @@
 #include <string>
 #include <filesystem>
 #include <qadon.h>
+#include <cstring>
 class EngineInterface {
 
     public: 
@@ -37,8 +38,12 @@ class EngineInterface {
             const char* default_sprite;
         }object_info;
 
+        char scene_name[64];
         const char* selected_object;
-
+        const char* selected_scene;
+        
+        std::vector<std::string> available_scenes;
+        std::vector<std::string> available_scene_names;
     
 };
 #endif

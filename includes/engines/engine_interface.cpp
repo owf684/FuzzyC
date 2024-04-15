@@ -17,11 +17,26 @@
 #include "imgui_impl_sdl2.h"
 #include "imgui_impl_sdlrenderer2.h"
 #include "bird.h"
+#include "tinyxml2.h"
+#include <cstdlib> // for atof function
+
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
 #endif
 
+using namespace tinyxml2;
 
+
+bool stringToBool(const char* str) {
+    if (std::strcmp(str, "true") == 0 || std::strcmp(str, "yes") == 0 || std::strcmp(str, "1") == 0) {
+        return true;
+    } else if (std::strcmp(str, "false") == 0 || std::strcmp(str, "no") == 0 || std::strcmp(str, "0") == 0) {
+        return false;
+    }
+    // If the string doesn't match any recognized value, you might want to handle that case accordingly
+    // Here, we'll return false as a default
+    return false;
+}
 
 // Constructors 
 EngineInterface::EngineInterface()
@@ -43,6 +58,15 @@ EngineInterface::EngineInterface()
     // Setup Platform/Renderer backends
     ImGui_ImplSDL2_InitForSDLRenderer(graphics_engine.window, graphics_engine.renderer);
     ImGui_ImplSDLRenderer2_Init(graphics_engine.renderer);
+
+    // update scenes vector
+    for (const auto& entry : std::filesystem::directory_iterator("./game_data/scenes"))
+    {
+        if (entry.path().extension() == ".xml") {
+            available_scenes.push_back(entry.path().string()); 
+            available_scene_names.push_back(entry.path().filename().replace_extension(""));
+        }
+    }
 
 }
 
@@ -291,19 +315,207 @@ void EngineInterface::object_contorls(){
 */
 void EngineInterface::scene_controls(){
     ImGui::Begin("Scene Controls");
-    if (ImGui::Button("New Scene"))
-    {
+    
+    ImGui::InputText("Scene Name", scene_name,IM_ARRAYSIZE(scene_name));
 
+    if (ImGui::Button("Clear Scene"))
+    {
+        graphics_engine.render_buffer.clear();
     }
     ImGui::SameLine();
 
     if (ImGui::Button("Remove Scene"))
     {
+        std::string remove_scene_cmd = "rm " + std::string(selected_scene);
+        system(remove_scene_cmd.c_str());
 
+         // update scenes vector
+         available_scenes.clear();
+         available_scene_names.clear();
+        for (const auto& entry : std::filesystem::directory_iterator("./game_data/scenes"))
+        {
+            if (entry.path().extension() == ".xml") {
+                    available_scenes.push_back(entry.path().string()); 
+                    available_scene_names.push_back(entry.path().filename().replace_extension(""));
+
+            }
+        }
+        selected_scene = NULL;
     }
-    ImGui::ColorPicker3("Scene Color", (float*) &scene_color);
 
-    ImGui::End();
+    ImGui::SameLine();
+    if (ImGui::Button("Save Scene"))
+    {
+        // create xml scene
+        // Create a new XML document
+        XMLDocument doc;
+
+        // Create a declaration (<?xml version="1.0"?>)
+        XMLDeclaration* declaration = doc.NewDeclaration();
+        doc.InsertFirstChild(declaration);
+
+        // Create a root element
+        XMLElement* root = doc.NewElement("scene");
+        doc.InsertEndChild(root);
+
+        // Create book elements and add them to the root
+        XMLElement* EngineControls = doc.NewElement("engine_controls");
+        EngineControls->SetAttribute("frames_per_second", frames_per_second_f);
+        EngineControls->SetAttribute("grid_size", graphics_engine.grid_size);
+        EngineControls->SetAttribute("view_grid", view_grid);
+        EngineControls->SetAttribute("snap_to_grid",snap_to_grid );
+        EngineControls->SetAttribute("move_speed", scroll_engine.move_speed);
+        EngineControls->SetAttribute("move_world",move_world_enabled);
+
+        root->InsertEndChild(EngineControls);
+
+        XMLElement* SceneControls = doc.NewElement("scene_controls");
+        SceneControls->SetAttribute("scene_color_w",scene_color.w);
+        SceneControls->SetAttribute("scene_color_x",scene_color.x);
+        SceneControls->SetAttribute("scene_color_y",scene_color.y);
+        SceneControls->SetAttribute("scene_color_z",scene_color.z);
+      
+        root->InsertEndChild(SceneControls);
+
+        XMLElement* CameraControls = doc.NewElement("camera_controls");
+        CameraControls->SetAttribute("x_axis_left_threshold",scroll_engine.left_x_scroll_threshold);
+        CameraControls->SetAttribute("x_axis_right_threshold",scroll_engine.right_x_scroll_threshold);
+        CameraControls->SetAttribute("y_axis_up_scroll_threshold",scroll_engine.up_y_scroll_threshold);
+        CameraControls->SetAttribute("y_axis_down_scroll_threshold",scroll_engine.down_y_scroll_threshold);
+
+        root->InsertEndChild(CameraControls);
+
+        //XMLElement* root2 = doc.NewElement("objects");
+        //doc.InsertEndChild(root2);
+
+        for(auto& game_objects : graphics_engine.render_buffer)
+        {   
+            XMLElement* object = doc.NewElement("game_object");
+            object->SetAttribute("object_name",game_objects->object_name.c_str());
+            object->SetAttribute("x_position",game_objects->physics.position.x-int(scroll_engine.accumulated_x));
+            object->SetAttribute("y_position",game_objects->physics.position.y-int(scroll_engine.accumulated_y));
+            object->SetAttribute("camera_active",game_objects->camera.camera_active);
+            root->InsertEndChild(object);
+
+        }
+
+        // Save the XML document to a file
+        std::string scene_name_and_dir= "./game_data/scenes/"  + std::string(scene_name) + ".xml";
+
+        if (doc.SaveFile(scene_name_and_dir.c_str()) == XML_SUCCESS) { 
+            std::cout << "XML document created successfully." << std::endl;
+        } else {
+            std::cout << "Error saving XML document." << std::endl;
+        }
+
+
+                // update scenes vector
+         available_scenes.clear();
+         available_scene_names.clear();
+        for (const auto& entry : std::filesystem::directory_iterator("./game_data/scenes"))
+        {
+            if (entry.path().extension() == ".xml") {
+                    available_scenes.push_back(entry.path().string()); 
+                    available_scene_names.push_back(entry.path().filename().replace_extension(""));
+
+            }
+        }
+        selected_scene = NULL;
+        
+        }
+
+        ImGui::SetNextItemWidth(256);
+        
+       if (ImGui::BeginCombo("available scenes",selected_scene))
+        {
+
+            int i = 0;
+            for (auto&scenes : available_scenes)
+            {
+                bool is_selected = (selected_scene == scenes.c_str());
+
+                if (ImGui::Selectable(scenes.c_str(), is_selected))
+                {
+                    selected_scene = scenes.c_str();
+                    std::strcpy(scene_name ,available_scene_names[i].c_str());
+                    
+                }
+                if (is_selected)
+                {
+                    ImGui::SetItemDefaultFocus();
+                }
+                i++;
+            }
+            ImGui::EndCombo();
+
+            
+        }
+       
+        ImGui::SameLine();
+        if (ImGui::Button("Load Scene"))
+        {
+            if (selected_scene != NULL)
+            {
+            // pause the engine
+            play_pause = false;
+
+            // clear the render buffer 
+            graphics_engine.render_buffer.clear();
+
+            // clear accumulated x&y
+            scroll_engine.accumulated_x = 0;
+            scroll_engine.accumulated_y = 0;
+
+            // open scene xml file
+            XMLDocument scene;
+            scene.LoadFile(selected_scene);  // TODO: this needs to come from a combo box!
+            XMLElement* root = scene.RootElement();
+
+            // load engine controls
+            XMLElement* engine_controls_element = root->FirstChildElement("engine_controls");
+            frames_per_second_f = std::atof(engine_controls_element->Attribute("frames_per_second"));
+            graphics_engine.grid_size = std::atoi(engine_controls_element->Attribute("grid_size"));
+            const char* true_str = "true";
+            view_grid = stringToBool(engine_controls_element->Attribute("view_grid"));
+            snap_to_grid = stringToBool(engine_controls_element->Attribute("snap_to_grid"));
+            scroll_engine.move_speed = std::atoi(engine_controls_element->Attribute("move_speed"));
+            move_world_enabled = stringToBool(engine_controls_element->Attribute("move_world"));
+
+            // load scene controls
+            XMLElement* scene_controls_element = root->FirstChildElement("scene_controls");
+            scene_color.w = std::atof(scene_controls_element->Attribute("scene_color_w"));
+            scene_color.x = std::atof(scene_controls_element->Attribute("scene_color_x"));
+            scene_color.y = std::atof(scene_controls_element->Attribute("scene_color_y"));
+            scene_color.z = std::atof(scene_controls_element->Attribute("scene_color_z"));
+
+
+            // load camera controls
+            XMLElement* camera_controls_element = root->FirstChildElement("camera_controls");
+            scroll_engine.left_x_scroll_threshold = std::atof(camera_controls_element->Attribute("x_axis_left_threshold"));
+            scroll_engine.right_x_scroll_threshold = std::atof(camera_controls_element->Attribute("x_axis_right_threshold"));
+            scroll_engine.up_y_scroll_threshold = std::atof(camera_controls_element->Attribute("y_axis_up_scroll_threshold"));
+            scroll_engine.down_y_scroll_threshold = std::atof(camera_controls_element->Attribute("y_axis_down_scroll_threshold"));
+
+            // load objects
+            for (XMLElement* gameObject = root->FirstChildElement("game_object"); gameObject; gameObject = gameObject->NextSiblingElement("game_object")) {
+                // Access the attributes of the game_object element
+                const char* objectName = gameObject->Attribute("object_name");
+                float xPos, yPos;
+                bool cameraActive;
+                gameObject->QueryFloatAttribute("x_position", &xPos);
+                gameObject->QueryFloatAttribute("y_position", &yPos);
+                gameObject->QueryBoolAttribute("camera_active", &cameraActive);
+
+                object_handler.generate_object(objectName,ImVec2(xPos,yPos));
+                graphics_engine.render_buffer[0]->camera.camera_active = cameraActive;
+            }
+            }
+        }
+
+        
+        ImGui::ColorPicker3("Scene Color", (float*) &scene_color);
+
+        ImGui::End();
 }
 
 
