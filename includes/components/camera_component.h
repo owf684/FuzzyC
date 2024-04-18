@@ -6,6 +6,7 @@ class CameraComponent {
 
     public:
 
+        CameraComponent();
         void update();
         bool camera_active;
 
