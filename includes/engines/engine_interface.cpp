@@ -271,10 +271,10 @@ void EngineInterface::object_contorls(){
                     ImVec2 snapped_position(x_pos,y_pos);
 
                     // create new object
-                    object_handler.generate_object(selected_object,snapped_position);
+                    object_handler.generate_object(selected_object,snapped_position, false);
 
 
-                } else {object_handler.generate_object(selected_object,ImGui::GetMousePos());}
+                } else {object_handler.generate_object(selected_object,ImGui::GetMousePos(), false);}
             
             } else if (!input_engine.left_click && already_placed)
             {
@@ -388,16 +388,26 @@ void EngineInterface::scene_controls(){
         //XMLElement* root2 = doc.NewElement("objects");
         //doc.InsertEndChild(root2);
 
+        XMLElement* ObjectList = doc.NewElement("object_list");
+
+        int i = 0;
+        std::string object_name;       
         for(auto& game_objects : graphics_engine.render_buffer)
         {   
-            XMLElement* object = doc.NewElement("game_object");
+            object_name = "game_object_" + std::to_string(i);
+            XMLElement* object = doc.NewElement(object_name.c_str());
             object->SetAttribute("object_name",game_objects->object_name.c_str());
             object->SetAttribute("x_position",game_objects->physics.position.x-int(scroll_engine.accumulated_x));
             object->SetAttribute("y_position",game_objects->physics.position.y-int(scroll_engine.accumulated_y));
             object->SetAttribute("camera_active",game_objects->camera.camera_active);
-            root->InsertEndChild(object);
+            ObjectList->InsertEndChild(object);
+            i += 1;
 
         }
+        //ObjectList->SetAttribute("itemCount", graphics_engine.render_buffer.size());
+        ObjectList->SetAttribute("itemCount",float(graphics_engine.render_buffer.size()));
+
+        root->InsertEndChild(ObjectList);
 
         // Save the XML document to a file
         std::string scene_name_and_dir= "./game_data/scenes/"  + std::string(scene_name) + ".xml";
@@ -468,11 +478,12 @@ void EngineInterface::scene_controls(){
 
             // open scene xml file
             XMLDocument scene;
-            scene.LoadFile(selected_scene);  // TODO: this needs to come from a combo box!
+            scene.LoadFile(selected_scene);  
             XMLElement* root = scene.RootElement();
 
             // load engine controls
             XMLElement* engine_controls_element = root->FirstChildElement("engine_controls");
+           
             frames_per_second_f = std::atof(engine_controls_element->Attribute("frames_per_second"));
             graphics_engine.grid_size = std::atoi(engine_controls_element->Attribute("grid_size"));
             const char* true_str = "true";
@@ -480,6 +491,7 @@ void EngineInterface::scene_controls(){
             snap_to_grid = stringToBool(engine_controls_element->Attribute("snap_to_grid"));
             scroll_engine.move_speed = std::atoi(engine_controls_element->Attribute("move_speed"));
             move_world_enabled = stringToBool(engine_controls_element->Attribute("move_world"));
+
 
             // load scene controls
             XMLElement* scene_controls_element = root->FirstChildElement("scene_controls");
@@ -496,22 +508,34 @@ void EngineInterface::scene_controls(){
             scroll_engine.up_y_scroll_threshold = std::atof(camera_controls_element->Attribute("y_axis_up_scroll_threshold"));
             scroll_engine.down_y_scroll_threshold = std::atof(camera_controls_element->Attribute("y_axis_down_scroll_threshold"));
 
-            // load objects
-            for (XMLElement* gameObject = root->FirstChildElement("game_object"); gameObject; gameObject = gameObject->NextSiblingElement("game_object")) {
+
+            XMLElement* objectList = root->FirstChildElement("object_list");
+            
+            int i = 0;
+            std::string object_name = "game_object_" + std::to_string(i);
+
+            XMLElement * gameObject = objectList->FirstChildElement("game_object_0");
+            
+            float xPos, yPos;
+            bool cameraActive;
+            // load objects 
+            while (gameObject != nullptr)
+
+            {   //std::cout << gameObject << std::endl;
                 // Access the attributes of the game_object element
                 const char* objectName = gameObject->Attribute("object_name");
-                float xPos, yPos;
-                bool cameraActive;
-                gameObject->QueryFloatAttribute("x_position", &xPos);
-                gameObject->QueryFloatAttribute("y_position", &yPos);
+                xPos = std::atof(gameObject->Attribute("x_position"));
+                yPos = std::atof(gameObject->Attribute("y_position"));
+                //std::cout << "xPos= " << xPos << " yPos " << yPos << std::endl;
                 gameObject->QueryBoolAttribute("camera_active", &cameraActive);
+                object_handler.generate_object(objectName,ImVec2(xPos,yPos), cameraActive);
+                ++i;
+                std::string object_name = "game_object_" + std::to_string(i);
+                gameObject = objectList->FirstChildElement(object_name.c_str());
 
-                object_handler.generate_object(objectName,ImVec2(xPos,yPos));
-                graphics_engine.render_buffer[0]->camera.camera_active = cameraActive;
             }
             }
         }
-
         
         ImGui::ColorPicker3("Scene Color", (float*) &scene_color);
 
