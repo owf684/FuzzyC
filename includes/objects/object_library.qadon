@@ -1,4 +1,8 @@
 {
+breakable_brick : breakable_brick
 test_platform : test_platform
 bird : bird
+brick : brick
+mario : mario
+warp_pipe : warp_pipe
 }
