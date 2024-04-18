@@ -185,7 +185,7 @@ void CollisionEngine::right_collision(std::unique_ptr<GameObject>& current_objec
 bool CollisionEngine::above(std::unique_ptr<GameObject>& object_1, std::unique_ptr<GameObject>& object_2)
 {
     int x_tolerance = 0;
-
+    int y_tolerance = 0;
     // check the y axis
 
     if (object_1->collider.bottom() > object_2->collider.top() &&
@@ -193,8 +193,8 @@ bool CollisionEngine::above(std::unique_ptr<GameObject>& object_1, std::unique_p
     {
         // check the x axis
     
-        if (object_1->collider.center_x() > object_2->collider.left()+x_tolerance &&
-            object_1->collider.center_x() < object_2->collider.right()-x_tolerance)
+        if (object_1->collider.center_x() >= object_2->collider.left()+x_tolerance &&
+            object_1->collider.center_x() <= object_2->collider.right()-x_tolerance)
             return true;
         else if (object_1->collider.left() > object_2->collider.left()+x_tolerance &&
                  object_1->collider.left() < object_2->collider.right()-x_tolerance)
@@ -276,17 +276,14 @@ bool CollisionEngine::to_left(std::unique_ptr<GameObject>& object_1, std::unique
         // check y axis
         if (object_1->collider.center_y() > object_2->collider.top() && 
             object_1->collider.center_y() < object_2->collider.bottom())
-
             return true;
 
-        else if ( object_1->collider.top() > object_2->collider.top() &&
-                  object_1->collider.top() + 2*y_tolerance < object_2->collider.bottom())
-
+        else if ( object_1->collider.top() >= object_2->collider.top()-y_tolerance &&
+                  object_1->collider.top() + y_tolerance < object_2->collider.bottom())
             return true;
 
-        else if ( object_1->collider.bottom()-y_tolerance > object_2->collider.top() &&
-                  object_1->collider.bottom()-y_tolerance < object_2->collider.bottom())
-
+        else if ( object_1->collider.bottom() > object_2->collider.top() + y_tolerance &&
+                  object_1->collider.bottom() < object_2->collider.bottom() + y_tolerance)
             return true;
 
         else return false;
@@ -311,7 +308,7 @@ bool CollisionEngine::to_right(std::unique_ptr<GameObject>& object_1, std::uniqu
     
     // check x axis
 
-    if (object_1->collider.left()  < object_2->collider.right() &&
+    if (object_1->collider.left()  <= object_2->collider.right() &&
         object_1->collider.right() > object_2->collider.right() &&
         object_1->collider.left() > object_2->collider.left() &&
         object_1->collider.right() > object_2->collider.left() &&
@@ -325,13 +322,13 @@ bool CollisionEngine::to_right(std::unique_ptr<GameObject>& object_1, std::uniqu
 
             return true;
 
-        else if ( object_1->collider.top() > object_2->collider.top() &&
-                  object_1->collider.top()+ 2*y_tolerance < object_2->collider.bottom())
+        else if ( object_1->collider.top() >= object_2->collider.top() -y_tolerance &&
+                  object_1->collider.top()+ y_tolerance < object_2->collider.bottom())
 
             return true;
 
-        else if ( object_1->collider.bottom()-y_tolerance > object_2->collider.top() &&
-                  object_1->collider.bottom()-y_tolerance < object_2->collider.bottom())
+        else if ( object_1->collider.bottom() > object_2->collider.top() + y_tolerance &&
+                  object_1->collider.bottom() < object_2->collider.bottom() + y_tolerance)
 
             return true;
 
