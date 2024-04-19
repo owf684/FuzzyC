@@ -73,7 +73,7 @@ class PhysicsComponent
    
    void calculate_position(float dt);
    
-   void calculate_impulse();
+   void calculate_impulse(float dt);
 
  
 

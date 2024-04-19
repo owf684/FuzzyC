@@ -137,11 +137,11 @@ void PhysicsComponent::calculate_position(float dt)
 *  decrease of the impulse. 
 */ 
 
-void PhysicsComponent::calculate_impulse()
+void PhysicsComponent::calculate_impulse(float dt)
 {
   if(impulse.y < 0)
   {
-    impulse.y += gravity;
+    impulse.y -= mass*velocity.y*dt;
   }
 }
 
@@ -164,7 +164,7 @@ void PhysicsComponent::update(float dt)
   calculate_acceleration();
   calculate_velocity(dt);
   calculate_position(dt);
-  calculate_impulse();
+  calculate_impulse(dt);
 
   if (debug_enabled)
   {
