@@ -260,7 +260,7 @@ bool CollisionEngine::to_left(std::unique_ptr<GameObject>& object_1, std::unique
     // this tolerance prevents objects from falsely triggering right collisions when bottom
     // sinks underneath a surface
 
-    int y_tolerance = 10;
+    int y_tolerance = 15;
 
     // check x axis
     if (object_1->collider.right() > object_2->collider.left() &&
@@ -304,7 +304,7 @@ bool CollisionEngine::to_right(std::unique_ptr<GameObject>& object_1, std::uniqu
 {
     // this tolerance prevents objects from falsely triggering right collisions when bottom
     // sinks underneath a surface
-    int y_tolerance = 10;
+    int y_tolerance = 15;
     
     // check x axis
 
