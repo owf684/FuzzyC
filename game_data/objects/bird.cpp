@@ -30,7 +30,7 @@ void bird::move_horizontal()
     if (input_engine.arrow_keys.up &&  collider.is.down) // bug here for some reason this true upon engine start. screws things up
     {
         //move up
-        physics.impulse.y = -10000;
+        physics.impulse.y = -7000;
     }
     if (input_engine.arrow_keys.right)
     {
