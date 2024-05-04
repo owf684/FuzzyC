@@ -1,4 +1,3 @@
-#include "camera_engine.h"
 #include "engine_globals.h"
 #include <iostream>
 
@@ -12,7 +11,7 @@ CameraEngine::CameraEngine()
 *
 *   Purpose: This function calls other functions
 */
-void CameraEngine::update(std::unique_ptr<GameObject> &object)
+void CameraEngine::update(GameObject* object)
 {
     handle_camera(object);
 }
@@ -23,7 +22,7 @@ void CameraEngine::update(std::unique_ptr<GameObject> &object)
 * and decides whether to enable scrolling in the x or y axis. The thresholds are controlled by two sliders
 * in the UI. 
 */
-void CameraEngine::handle_camera(std::unique_ptr<GameObject> &object)
+void CameraEngine::handle_camera(GameObject* object)
 {
 
     if (object->camera.camera_active)

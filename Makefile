@@ -5,8 +5,8 @@ OBJECTS_LIB = ./includes/objects
 GAMEOBJECTS = ./game_data/objects
 IMGUI = ./includes/imgui-1.90.4-docking
 CXX = g++
-CXXFLAGS += -std=c++20 $(shell sdl2-config --cflags)
-CXXFLAGS += -I$(IMGUI) -I$(IMGUI)/backends -I$(INCLUDES) -I$(OBJECTS_LIB) -I$(GAMEOBJECTS)
+CXXFLAGS += -std=c++20 $(shell sdl2-config --cflags) -g 
+CXXFLAGS += -I$(IMGUI) -I$(IMGUI)/backends -I$(INCLUDES) -I$(OBJECTS_LIB) -I$(GAMEOBJECTS) -I$(COMPONENTS)
 LDFLAGS = -lstdc++ -lSDL2
 # List of source files
 SOURCES := ./main.cpp \

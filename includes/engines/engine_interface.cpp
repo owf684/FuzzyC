@@ -289,16 +289,12 @@ void EngineInterface::object_contorls(){
         {
             if (input_engine.right_click)
             {
-                for (auto& objects : graphics_engine.render_buffer)
-                {
-                    if (objects->collider.in_rect(ImGui::GetMousePos().x, ImGui::GetMousePos().y))
+                for (auto objects = graphics_engine.render_buffer.begin(); objects != graphics_engine.render_buffer.end(); objects++)
+                {   
+                    if ((*objects)->collider.in_rect(ImGui::GetMousePos().x, ImGui::GetMousePos().y))
                     {
-                        auto it = std::find(graphics_engine.render_buffer.begin(),graphics_engine.render_buffer.end(),objects);
-                        if (it != graphics_engine.render_buffer.end())
-                        {
-                            graphics_engine.render_buffer.erase(it);
-                            break;
-                        }
+                        graphics_engine.render_buffer.remove(objects);
+                        break;
                     }
                 }
             }

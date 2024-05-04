@@ -18,24 +18,6 @@
 #include "engine_globals.h"
 #include "interface_globals.h"
 
-// Constructor
-GraphicsEngine::GraphicsEngine(int input_width,int input_height, int input_bpp)
-{
-	// set dimensions
-	width = input_width;
-	height = input_height;
-	bpp = input_bpp;
-	
-	
-    SDL_Init(SDL_INIT_EVERYTHING);
-    SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_FULLSCREEN_DESKTOP, &window, &renderer);
-	SDL_SetWindowPosition(window,0,0);
-	SDL_SetWindowResizable(window, SDL_TRUE);
-    SDL_RenderClear(renderer);
-    SDL_RenderPresent(renderer);
-	grid_size = 32;
-
-}
 
 /* Function: update()
 *
@@ -50,16 +32,16 @@ void GraphicsEngine::update()
 	
 	if (engine_interface.view_grid) draw_grid();
 
-	for (int i = 0; i < render_buffer.size(); i++) {
+	for (auto& objects : render_buffer) {
 
     	// Convert the surface to a texture
-    	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, render_buffer[i]->sprite.current);
+    	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, objects->sprite.current);
 
     	// Check if the conversion was successful
     	if (texture != nullptr) {
 
         	// Copy the texture to the renderer
-       		SDL_RenderCopy(renderer, texture, nullptr, &render_buffer[i]->sprite.rect);
+       		SDL_RenderCopy(renderer, texture, nullptr, &objects->sprite.rect);
 
         	// Free the texture (you can do this after rendering)
         	SDL_DestroyTexture(texture);

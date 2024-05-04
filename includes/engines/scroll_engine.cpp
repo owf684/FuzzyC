@@ -11,7 +11,7 @@ ScrollEngine::ScrollEngine()
     up_y_scroll_threshold = graphics_engine.width/4;
     down_y_scroll_threshold = graphics_engine.width/2;
 }
-void ScrollEngine::update(std::unique_ptr<GameObject> &object)
+void ScrollEngine::update(GameObject* object)
 {
     if (scroll_x_position)
     {

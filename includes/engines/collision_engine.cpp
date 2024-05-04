@@ -22,7 +22,6 @@
 * delivers to other objects
 */
 
-#include "collision_engine.h"
 #include "engine_globals.h"
 
 
@@ -37,11 +36,11 @@
 
 
 
-void CollisionEngine::update(std::unique_ptr<GameObject>& object) 
+void CollisionEngine::update(GameObject* object, std::list<GameObject* > &other_objs) 
 {
-    // reset colliders
+    // reset colliders    
     object->collider.reset();
-
+    
     // update collider position
     object->collider.box.x = object->physics.position.x;
     object->collider.box.y = object->physics.position.y;
@@ -50,17 +49,19 @@ void CollisionEngine::update(std::unique_ptr<GameObject>& object)
     object->collider.box.w = object->sprite.rect.w;
     object->collider.box.h = object->sprite.rect.h;
 
-    int i  = 0;
-
-    for(auto& other : graphics_engine.render_buffer)
+    
+    for(auto& other : other_objs)
     {
-        left_collision(object, other);
-        right_collision(object,other);        
-        down_collision(object, other);
-        up_collision(object, other);
+        if (other != nullptr && object != other){
+            left_collision(object, other);
+            right_collision(object, other);        
+            down_collision(object, other);
+            up_collision(object, other);
+        }
         
-        ++i;
     }
+
+    
 }
 
 /* Function: down_collision()
@@ -70,7 +71,7 @@ void CollisionEngine::update(std::unique_ptr<GameObject>& object)
 *
 */
 
- void CollisionEngine::down_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
+ void CollisionEngine::down_collision(GameObject* current_object, GameObject* other)
 {
     if (above(current_object, other))
     {
@@ -97,7 +98,7 @@ void CollisionEngine::update(std::unique_ptr<GameObject>& object)
 *
 */
 
-void CollisionEngine::up_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
+void CollisionEngine::up_collision(GameObject* current_object, GameObject* other)
 {
     if ( below(current_object,other) )
     {
@@ -123,7 +124,7 @@ void CollisionEngine::up_collision(std::unique_ptr<GameObject>& current_object, 
 *
 */
 
-void CollisionEngine::left_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
+void CollisionEngine::left_collision(GameObject* current_object, GameObject* other)
 {       
     if (to_right(current_object,other))
     {
@@ -150,7 +151,7 @@ void CollisionEngine::left_collision(std::unique_ptr<GameObject>& current_object
 *
 */
 
-void CollisionEngine::right_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
+void CollisionEngine::right_collision(GameObject* current_object, GameObject* other)
 {
     if ( to_left(current_object,other) )
     {
@@ -182,7 +183,7 @@ void CollisionEngine::right_collision(std::unique_ptr<GameObject>& current_objec
 *
 */
 
-bool CollisionEngine::above(std::unique_ptr<GameObject>& object_1, std::unique_ptr<GameObject>& object_2)
+bool CollisionEngine::above(GameObject* object_1, GameObject* object_2)
 {
     int x_tolerance = 0;
     int y_tolerance = 0;
@@ -215,7 +216,7 @@ bool CollisionEngine::above(std::unique_ptr<GameObject>& object_1, std::unique_p
 *
 */
 
-bool CollisionEngine::below(std::unique_ptr<GameObject>& object_1, std::unique_ptr<GameObject>& object_2)
+bool CollisionEngine::below(GameObject* object_1, GameObject* object_2)
 {
     int x_tolerance = 0;
     // check the y xais
@@ -255,7 +256,7 @@ bool CollisionEngine::below(std::unique_ptr<GameObject>& object_1, std::unique_p
 * and is overlapping it
 *
 */
-bool CollisionEngine::to_left(std::unique_ptr<GameObject>& object_1, std::unique_ptr<GameObject>& object_2)
+bool CollisionEngine::to_left(GameObject* object_1, GameObject* object_2)
 {
     // this tolerance prevents objects from falsely triggering right collisions when bottom
     // sinks underneath a surface
@@ -300,7 +301,7 @@ bool CollisionEngine::to_left(std::unique_ptr<GameObject>& object_1, std::unique
 * and is overlapping it
 */
 
-bool CollisionEngine::to_right(std::unique_ptr<GameObject>& object_1, std::unique_ptr<GameObject>& object_2)
+bool CollisionEngine::to_right(GameObject* object_1, GameObject* object_2)
 {
     // this tolerance prevents objects from falsely triggering right collisions when bottom
     // sinks underneath a surface
@@ -347,7 +348,7 @@ bool CollisionEngine::to_right(std::unique_ptr<GameObject>& object_1, std::uniqu
 *
 */
 
-void CollisionEngine::handle_physics(std::unique_ptr<GameObject>& current_object)
+void CollisionEngine::handle_physics(GameObject* current_object)
 {
     
 
@@ -367,7 +368,7 @@ void CollisionEngine::handle_physics(std::unique_ptr<GameObject>& current_object
 *
 */  
 
-void CollisionEngine::x_inelastic_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
+void CollisionEngine::x_inelastic_collision(GameObject* current_object, GameObject* other)
 {
     // inelastic collisions
     // V = (mass_a * velocity_a - mass_b * velocity_b) / (mass_a + mass_b)
@@ -390,7 +391,7 @@ void CollisionEngine::x_inelastic_collision(std::unique_ptr<GameObject>& current
 *
 */  
 
-void CollisionEngine::y_inelastic_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
+void CollisionEngine::y_inelastic_collision(GameObject* current_object, GameObject* other)
 {
     // inelastic collisions
     // V = (mass_a * velocity_a - mass_b * velocity_b) / (mass_a + mass_b)
@@ -412,7 +413,7 @@ void CollisionEngine::y_inelastic_collision(std::unique_ptr<GameObject>& current
 *
 */
 
-void CollisionEngine::y_elastic_collision(std::unique_ptr<GameObject>& current_object, std::unique_ptr<GameObject>& other)
+void CollisionEngine::y_elastic_collision(GameObject* current_object, GameObject* other)
 {
     current_object->physics.impulse.y = 0;
 /*
@@ -453,7 +454,7 @@ void CollisionEngine::y_elastic_collision(std::unique_ptr<GameObject>& current_o
 *
 */
 
-void CollisionEngine::x_elastic_collision(std::unique_ptr<GameObject>& current_object,std::unique_ptr<GameObject>& other)
+void CollisionEngine::x_elastic_collision(GameObject* current_object,GameObject* other)
 {
     /*
     v1 = ((m1 – m2)*u1 + 2*m2*u2) / (m1 + m2)

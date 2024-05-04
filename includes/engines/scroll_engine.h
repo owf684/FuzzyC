@@ -9,7 +9,7 @@ class ScrollEngine {
 
     public:
         ScrollEngine();
-        void update(std::unique_ptr<GameObject> &object);
+        void update(GameObject* object);
         void move_world();
         int move_speed;
         float accumulated_y;
