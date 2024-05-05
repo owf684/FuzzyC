@@ -8,7 +8,7 @@
 #define BOTTOM_LEFT_QUAD 1
 #define TOP_RIGHT_QUAD 2
 #define BOTTOM_RIGHT_QUAD 3
-#define MAX_LAYERS 4
+#define MAX_LAYERS 8
 // book keeping for data getting added
 
 template <typename T>
@@ -38,7 +38,8 @@ struct Point {
 
 
 template <typename T>
-class QuadTree {
+class QuadTree 
+{
 
     public:
         int layer; // root is 0
@@ -110,29 +111,35 @@ class QuadTree {
             layer = parent->layer+1;
 
             if (item == nullptr) return;
+
+            if (!contains(item)) return;
+
             // insert into parent if it can't contain it anymore
-            if (!contains(item) || layer >= MAX_LAYERS)
+            if ( layer >= MAX_LAYERS)
             {
-                parent->items.push_back(item);
+                items.push_back(item);
                 //parent->items.push_back(item);
                 return;
             }
 
+            float mid_x = (top_left.x + bottom_right.x) / 2.0;
+            float mid_y = (top_left.y + bottom_right.y) / 2.0;
+
             // left quadrant
-            if (item->getX() < (top_left.x + bottom_right.x) / 2)
+            if (item->getX() < mid_x)
 
                 // top left quadrant
-                if (item->getY() < (top_left.y + bottom_right.y) /2)
+                if (item->getY() < mid_y)
                 {
                     if (children[TOP_LEFT_QUAD] == NULL)
-                        children[TOP_LEFT_QUAD] = new QuadTree( top_left, Point ( ( top_left.x + bottom_right.x ) / 2.0, (top_left.y + bottom_right.y) / 2.0) );
+                        children[TOP_LEFT_QUAD] = new QuadTree( top_left, Point ( mid_x, mid_y) );
 
                     children[TOP_LEFT_QUAD]->insert(item, this);
 
                 // bottom left quadrant
                 } else {
                     if (children[BOTTOM_LEFT_QUAD] == NULL)
-                        children[BOTTOM_LEFT_QUAD] = new QuadTree( Point(top_left.x, (top_left.y + bottom_right.y) / 2.0 ), Point( ( top_left.x + bottom_right.x ) / 2.0, bottom_right.y ) );
+                        children[BOTTOM_LEFT_QUAD] = new QuadTree( Point(top_left.x, mid_y ), Point( mid_x, bottom_right.y ) );
 
                     children[BOTTOM_LEFT_QUAD]->insert(item, this);
                 }
@@ -140,10 +147,10 @@ class QuadTree {
             else {
 
                  // top right quadrant
-                if (item->getY() < (top_left.y + bottom_right.y) /2)
+                if (item->getY() < mid_y)
                 {
                     if (children[TOP_RIGHT_QUAD] == NULL )
-                        children[TOP_RIGHT_QUAD] = new QuadTree( Point( (top_left.x + bottom_right.x) / 2.0, top_left.y ) , Point( bottom_right.x, (top_left.y + bottom_right.y) / 2.0 ) );
+                        children[TOP_RIGHT_QUAD] = new QuadTree( Point( mid_x, top_left.y ) , Point( bottom_right.x, mid_y ) );
 
                     children[TOP_RIGHT_QUAD]->insert(item, this);
 
@@ -151,7 +158,7 @@ class QuadTree {
                 } else {
 
                     if (children[BOTTOM_RIGHT_QUAD] == NULL)
-                        children[BOTTOM_RIGHT_QUAD] = new QuadTree( Point( (top_left.x + bottom_right.x) / 2.0, (top_left.y + bottom_right.y ) /2.0 ), bottom_right );
+                        children[BOTTOM_RIGHT_QUAD] = new QuadTree( Point( mid_x, mid_y ), bottom_right );
 
                     children[BOTTOM_RIGHT_QUAD]->insert(item, this);
                 }
@@ -171,24 +178,29 @@ class QuadTree {
         */
         void search(T& item, std::list<T>& item_list, QuadTree<T>* parent)
         {
-            if (item == nullptr) return;
 
             layer = parent->layer+1;
 
+            if (item == nullptr) return;
+
+            if (!contains(item) ) return;
+
             // insert into parent if it can't contain it anymore
-            if (!contains(item) || layer >= MAX_LAYERS)
+            if (layer >= MAX_LAYERS)
             {
-                item_list.insert(item_list.end(), parent->items.begin(), parent->items.end());
+                item_list.insert(item_list.end(), items.begin(), items.end());
                 //parent->search_nearby(item_list);
                 return;
             }
 
+            float mid_x = (top_left.x + bottom_right.x) / 2.0;
+            float mid_y = (top_left.y + bottom_right.y) / 2.0;
 
             // left quadrant
-            if (item->getX() < (top_left.x + bottom_right.x) / 2)
+            if (item->getX() < mid_x) {
 
                 // top left quadrant
-                if (item->getY() < (top_left.y + bottom_right.y) /2)
+                if (item->getY() < mid_y)
                 {
                     if (children[TOP_LEFT_QUAD] != NULL)
                         children[TOP_LEFT_QUAD]->search(item, item_list, this);
@@ -199,10 +211,10 @@ class QuadTree {
 
                 }
             // right quadrant
-            else {
+            } else {
 
                  // top right quadrant
-                if (item->getY() < (top_left.y + bottom_right.y) /2)
+                if (item->getY() < mid_y)
                 {
                     if (children[TOP_RIGHT_QUAD] != NULL)
                         children[TOP_RIGHT_QUAD]->search(item, item_list, this);
@@ -276,19 +288,24 @@ class QuadTree {
             // convert item to const iterator
             layer = parent->layer+1;
 
+            if (!contains(item)) return;
             // insert into parent if it can't contain it anymore
-            if (!contains(item) || layer >= MAX_LAYERS)
+            if (layer >= MAX_LAYERS)
             {
                 typename std::list<T>::const_iterator c_item = item;
-                parent->items.remove(*c_item);
+                items.remove(*c_item);
                 return;
             }
 
+
+            float mid_x = (top_left.x + bottom_right.x) / 2.0;
+            float mid_y = (top_left.y + bottom_right.y) / 2.0;
+
             // left quadrant
-            if ((*item)->getX() < (top_left.x + bottom_right.x) / 2)
+            if ((*item)->getX() < mid_x)
 
                 // top left quadrant
-                if ((*item)->getY() < (top_left.y + bottom_right.y) /2)
+                if ((*item)->getY() < mid_y)
                 {
                     if (children[TOP_LEFT_QUAD] != NULL)
                         children[TOP_LEFT_QUAD]->remove(item, this);
@@ -300,7 +317,7 @@ class QuadTree {
             // right quadrant
             else {
                  // top right quadrant
-                if ((*item)->getY() < (top_left.y + bottom_right.y) /2)
+                if ((*item)->getY() < mid_y)
                 {
                     if (children[TOP_RIGHT_QUAD] != NULL)
                         children[TOP_RIGHT_QUAD]->remove(item, this);
@@ -365,12 +382,13 @@ class QuadTreeContainer {
         root.insert(*item, &root);
 
     }
-    std::list<T> search(T& item, std::list<T>& items_found)
+    void search(T& item, std::list<T>& items_found)
     {
         root.search(item, items_found, &root);
-        return items_found;
+        return;
     }
 
+    // consider maybe remove this return! seems to be incredibly taxing to copy all that memory
     std::list<T> search(typename std::list< T >::iterator& item)
     {
         std::list<T> items_found;
