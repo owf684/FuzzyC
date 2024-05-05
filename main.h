@@ -17,9 +17,12 @@
 #include "interface_globals.h"
 #include <string>
 #include <qadon.h>
+#include <filesystem>
+
 //#include "./includes/objects/rdoh.h"
 //#include "./includes/objects/rdoh_util.h"
 
+namespace fs = std::filesystem;
 
 /* Initialize Interface Globals
 *
@@ -72,5 +75,7 @@ CameraEngine camera_engine;
 RDOH object_handler;
 RdohUtil object_util;
 
+std::filesystem::path exe_path;
+std::filesystem::path exe_dir;
 
 #endif 
