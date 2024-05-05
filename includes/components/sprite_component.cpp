@@ -20,7 +20,7 @@
 */
 
 #include "sprite_component.h"
-
+#include "engine_globals.h"
 
 
 // Constructor: No Arguments
@@ -28,6 +28,19 @@ Sprite::Sprite()
 { position.x = 0;
   position.y = 0;
   rect.x =0; rect.y=0; rect.w=50;rect.h=50;
+}
+
+// Destructor
+Sprite::~Sprite()
+{
+ if (current != nullptr) {
+        SDL_FreeSurface(current);
+        current = nullptr;
+    }
+    if (current_texture != nullptr) {
+        SDL_DestroyTexture(current_texture);
+        current_texture = nullptr;
+    }
 }
 
 // Constructor: Position Arguments
@@ -59,6 +72,9 @@ void Sprite::set_current(char* image_path)
 	current = SDL_LoadBMP(image_path);
 	rect.w = current->w;
 	rect.h = current->h;
+	current_texture = SDL_CreateTextureFromSurface(graphics_engine.renderer, current);
+
+
 
 }
 

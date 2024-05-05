@@ -9,8 +9,10 @@
 class Sprite{
 public:
 	Sprite();
+	~Sprite();
 	Sprite(float input_x, float input_y); 
 	SDL_Surface *current;
+	SDL_Texture* current_texture;
 	std::vector<SDL_Surface>* sprite_sheet;
 	bool has_sprite_sheet;
 	SDL_Rect rect;
