@@ -35,16 +35,16 @@ void GraphicsEngine::update()
 	for (auto& objects : render_buffer) {
 
     	// Convert the surface to a texture
-    	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, objects->sprite.current);
+    	//SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, objects->sprite.current);
 
     	// Check if the conversion was successful
-    	if (texture != nullptr) {
+    	if (objects->sprite.current_texture != nullptr) {
 
         	// Copy the texture to the renderer
-       		SDL_RenderCopy(renderer, texture, nullptr, &objects->sprite.rect);
+       		SDL_RenderCopy(renderer, objects->sprite.current_texture, nullptr, &objects->sprite.rect);
 
         	// Free the texture (you can do this after rendering)
-        	SDL_DestroyTexture(texture);
+        	//SDL_DestroyTexture(texture);
    	 	}
 	}
 
