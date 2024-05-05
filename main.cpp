@@ -10,7 +10,6 @@ int main(int argc, char* argv[])
 exe_path = fs::canonical(argv[0]);
 exe_dir = exe_path.parent_path();
 engine_interface.update_scenes_vector();
-std::cout << exe_dir << std::endl;
 
 bool first_pass = true;
 
