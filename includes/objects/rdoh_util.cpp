@@ -1,9 +1,6 @@
 
 #include "rdoh_util.h"
 
-
-
-
 std::string strupper(std::string word)
 {
     std::string temp = "";
@@ -15,9 +12,9 @@ std::string strupper(std::string word)
 
 }
 
-void RdohUtil::init()
+void RdohUtil::init(std::string exe_dir)
 {   obj_lib.clear();
-    qadon q_obj_lib("./includes/objects/object_library.qadon");
+    qadon q_obj_lib( exe_dir + "/includes/objects/object_library.qadon");
 	for (auto& pair : q_obj_lib)
 	{
 		obj_lib.push_back(pair.second);
