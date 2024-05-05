@@ -7,12 +7,19 @@ using namespace std::chrono;
 int main(int argc, char* argv[])
 {
 
+exe_path = fs::canonical(argv[0]);
+exe_dir = exe_path.parent_path();
+engine_interface.update_scenes_vector();
+std::cout << exe_dir << std::endl;
+
 bool first_pass = true;
 
 object_handler.init_objects();
-object_util.set_object_lib_path("./includes/objects/object_library.qadon");
-object_util.set_rdoh_file_path("./includes/objects/rdoh.cpp");
-object_util.init();
+
+// lib path
+object_util.set_object_lib_path( exe_dir.string() + "/includes/objects/object_library.qadon");
+object_util.set_rdoh_file_path( exe_dir.string() + "/includes/objects/rdoh.cpp");
+object_util.init(exe_dir.string());
 
 // main game loop 
 while(!input_engine.quit)
@@ -35,7 +42,7 @@ while(!input_engine.quit)
 			
 				physics_engine.update(*object);
 				std::list<GameObject*> other_objs;
-				graphics_engine.render_buffer.search(*object, other_objs);
+				if ((*object)->collider.detect_collisions) graphics_engine.render_buffer.search(*object, other_objs);
 				collision_engine.update(*object,other_objs);
 				sprite_engine.update(*object);
 				scroll_engine.update(*object);
