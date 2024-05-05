@@ -24,7 +24,7 @@ ColliderComponent::ColliderComponent()
     is.up = false;
     is.right = false;
     is.left = false;
-
+    detect_collisions = false;
     box.h = 0;
     box.w = 0;
     box.x = 0;

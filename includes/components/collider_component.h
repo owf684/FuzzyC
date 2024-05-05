@@ -36,6 +36,7 @@ class ColliderComponent{
     int center_y();
     void reset();
     bool in_rect(float x, float y);
+    bool detect_collisions;
 
 };
 
