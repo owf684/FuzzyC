@@ -59,17 +59,22 @@ EngineInterface::EngineInterface()
     ImGui_ImplSDL2_InitForSDLRenderer(graphics_engine.window, graphics_engine.renderer);
     ImGui_ImplSDLRenderer2_Init(graphics_engine.renderer);
 
-    // update scenes vector
-    for (const auto& entry : std::filesystem::directory_iterator("./game_data/scenes"))
+   
+
+}
+
+
+void EngineInterface::update_scenes_vector()
+{
+     // update scenes vector
+    for (const auto& entry : std::filesystem::directory_iterator(exe_dir.string() + "/game_data/scenes"))
     {
         if (entry.path().extension() == ".xml") {
             available_scenes.push_back(entry.path().string()); 
             available_scene_names.push_back(entry.path().filename().replace_extension(""));
         }
     }
-
 }
-
 /* Function: update
 * 
 *  Purpose: Calls the ImGUI
@@ -175,7 +180,8 @@ void EngineInterface::object_contorls(){
             show_add_object_menu = true;
             // iterate through directory and get asset bmp files and load them into asset vector
             object_info.available_assets.clear();
-            for (const auto& entry : std::filesystem::directory_iterator("./game_data/assets"))
+
+            for (const auto& entry : std::filesystem::directory_iterator(exe_dir.string() + "/game_data/assets"))
             {
                 if (entry.path().extension() == ".bmp") {
                     object_info.available_assets.push_back(entry.path().string()); 
@@ -328,7 +334,7 @@ void EngineInterface::scene_controls(){
          // update scenes vector
          available_scenes.clear();
          available_scene_names.clear();
-        for (const auto& entry : std::filesystem::directory_iterator("./game_data/scenes"))
+        for (const auto& entry : std::filesystem::directory_iterator( exe_dir.string() + "/game_data/scenes"))
         {
             if (entry.path().extension() == ".xml") {
                     available_scenes.push_back(entry.path().string()); 
@@ -406,7 +412,7 @@ void EngineInterface::scene_controls(){
         root->InsertEndChild(ObjectList);
 
         // Save the XML document to a file
-        std::string scene_name_and_dir= "./game_data/scenes/"  + std::string(scene_name) + ".xml";
+        std::string scene_name_and_dir= exe_dir.string() + "/game_data/scenes/"  + std::string(scene_name) + ".xml";
 
         if (doc.SaveFile(scene_name_and_dir.c_str()) == XML_SUCCESS) { 
             std::cout << "XML document created successfully." << std::endl;
@@ -418,7 +424,7 @@ void EngineInterface::scene_controls(){
                 // update scenes vector
          available_scenes.clear();
          available_scene_names.clear();
-        for (const auto& entry : std::filesystem::directory_iterator("./game_data/scenes"))
+        for (const auto& entry : std::filesystem::directory_iterator( exe_dir.string() +"/game_data/scenes"))
         {
             if (entry.path().extension() == ".xml") {
                     available_scenes.push_back(entry.path().string()); 
