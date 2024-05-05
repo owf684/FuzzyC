@@ -10,6 +10,8 @@ bird::bird()
     
    
     physics.gravity = 980;
+    collider.detect_collisions = true;
+
 }
 
 
