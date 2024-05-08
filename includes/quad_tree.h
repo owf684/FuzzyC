@@ -9,23 +9,16 @@
 #define TOP_RIGHT_QUAD 2
 #define BOTTOM_RIGHT_QUAD 3
 #define MAX_LAYERS 8
+
+
 // book keeping for data getting added
 
 template <typename T>
-struct QTIL{
-    typename std::list<T*>* item_list;
-    typename std::list<T*>::iterator item_it;
-
-    QTIL(){}
-};
-
-template <typename T>
-struct QTI {
+struct item_locator {
     T item;
-    QTIL<T> location;
-
-    QTI(){}
-
+    std::list<T>* item_list_ref;
+    typename std::list<T>::iterator item_it;
+    bool in_quad_tree;
 };
 
 struct Point {
@@ -106,20 +99,22 @@ class QuadTree
         * Purpose: This inserts item into
         * the smallest quadrant available
         */
-        void insert(T& item, QuadTree<T>* parent)
+        bool insert(T& item, QuadTree<T>* parent, item_locator<T>& item_locator)
         {
             layer = parent->layer+1;
 
-            if (item == nullptr) return;
+            if (item == nullptr) return false;
 
-            if (!contains(item)) return;
+            if (!contains(item)) return false;
 
             // insert into parent if it can't contain it anymore
             if ( layer >= MAX_LAYERS)
             {
                 items.push_back(item);
-                //parent->items.push_back(item);
-                return;
+                item_locator.item = item;
+                item_locator.item_list_ref = &items;
+                item_locator.item_it = std::prev(items.end());
+                return true;
             }
 
             float mid_x = (top_left.x + bottom_right.x) / 2.0;
@@ -134,14 +129,14 @@ class QuadTree
                     if (children[TOP_LEFT_QUAD] == NULL)
                         children[TOP_LEFT_QUAD] = new QuadTree( top_left, Point ( mid_x, mid_y) );
 
-                    children[TOP_LEFT_QUAD]->insert(item, this);
+                    children[TOP_LEFT_QUAD]->insert(item, this, item_locator);
 
                 // bottom left quadrant
                 } else {
                     if (children[BOTTOM_LEFT_QUAD] == NULL)
                         children[BOTTOM_LEFT_QUAD] = new QuadTree( Point(top_left.x, mid_y ), Point( mid_x, bottom_right.y ) );
 
-                    children[BOTTOM_LEFT_QUAD]->insert(item, this);
+                    children[BOTTOM_LEFT_QUAD]->insert(item, this, item_locator);
                 }
             // right quadrant
             else {
@@ -152,7 +147,7 @@ class QuadTree
                     if (children[TOP_RIGHT_QUAD] == NULL )
                         children[TOP_RIGHT_QUAD] = new QuadTree( Point( mid_x, top_left.y ) , Point( bottom_right.x, mid_y ) );
 
-                    children[TOP_RIGHT_QUAD]->insert(item, this);
+                    children[TOP_RIGHT_QUAD]->insert(item, this,item_locator);
 
                 // bottom right quadrant
                 } else {
@@ -160,7 +155,7 @@ class QuadTree
                     if (children[BOTTOM_RIGHT_QUAD] == NULL)
                         children[BOTTOM_RIGHT_QUAD] = new QuadTree( Point( mid_x, mid_y ), bottom_right );
 
-                    children[BOTTOM_RIGHT_QUAD]->insert(item, this);
+                    children[BOTTOM_RIGHT_QUAD]->insert(item, this,item_locator);
                 }
 
             }
@@ -351,7 +346,7 @@ class QuadTreeContainer {
 
     public:
     QuadTree<T> root;
-    std::list<T> items;
+    std::list<item_locator<T> > items;
 
     QuadTreeContainer(Point top_left, Point bottom_right) : root(top_left, bottom_right)
     {
@@ -360,26 +355,36 @@ class QuadTreeContainer {
 
     void insert(T& item)
     {
-        root.insert(item, &root);
-        items.push_back(item);
+        item_locator<T> new_locator;
+        if ( root.insert(item, &root,new_locator) )
+            new_locator.in_quad_tree = true;
+            items.push_back(new_locator);
     }
 
-    void remove(typename std::list<T>::iterator& item)
+    void remove(typename std::list< item_locator<T> >::iterator& old_locator)
     {
         // remove from quad tree
-        root.remove(item, &root);
+        if (old_locator->in_quad_tree)
+            old_locator->item_list_ref->erase(old_locator->item_it);
 
         // erase from item container list
-        items.erase(item);
+        items.erase(old_locator);
     }
 
-    void reinsert(typename std::list<T>::iterator& item)
+    void reinsert(typename std::list< item_locator<T> >::iterator& old_locator)
     {
         // remove from quad tree
-        root.remove(item, &root);
+        //root.remove(item, &root);
 
+        if (old_locator->in_quad_tree)
+            old_locator->item_list_ref->erase(old_locator->item_it);
         // insert back into the tree
-        root.insert(*item, &root);
+        if (root.insert( old_locator->item, &root, *old_locator) )
+            old_locator->in_quad_tree = true;
+        else old_locator->in_quad_tree = false;
+        
+
+        
 
     }
     void search(T& item, std::list<T>& items_found)
@@ -404,21 +409,22 @@ class QuadTreeContainer {
     void clear()
     {
         root.clear();
+        items.clear();
     }
-    typename std::list<T>::iterator begin()
+    typename std::list< item_locator<T>>::iterator begin()
     {
         return items.begin();
     }
 
-    typename std::list<T>::iterator end()
+    typename std::list< item_locator<T>>::iterator end()
     {
         return items.end();
     }
-    typename std::list<T>::iterator front()
+    typename std::list< item_locator<T>>::iterator front()
     {
         return items.front();
     }
-    typename std::list<T>::iterator back()
+    typename std::list< item_locator<T>>::iterator back()
     {
         return items.back();
     }
