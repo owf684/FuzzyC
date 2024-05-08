@@ -22,6 +22,8 @@ class RdohUtil
         void create_headers(std::ofstream &rdoh_file, qadon object_library);
         void create_init_objects(std::ofstream &rdoh_file, qadon object_library);
         void create_generate_object(std::ofstream &rdoh_file, qadon object_library);
+        void create_update_object(std::ofstream &rdoh_file, qadon object_library);
+
         std::string rdoh_file_path;
         std::string object_lib_path;
 
