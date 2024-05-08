@@ -38,8 +38,9 @@ void ScrollEngine::move_world()
     if (engine_interface.move_world_enabled)
     {
         bool scroll_direction[4] = {false, false, false, false};
-        for (auto& object : graphics_engine.render_buffer)
+        for (auto& object_locator : graphics_engine.render_buffer)
         {
+            GameObject* object = object_locator.item;
  
             if (input_engine.arrow_keys.right)
             {
@@ -86,8 +87,8 @@ void ScrollEngine::move_world()
 
         if (engine_interface.set_to_zero)
         {
-            for (auto& object : graphics_engine.render_buffer)
-            {
+            for (auto& object_locator : graphics_engine.render_buffer)
+            {   GameObject* object = object_locator.item;
                 object->set_position(object->physics.position.x - accumulated_x, object->physics.position.y - accumulated_y);
 			    sprite_engine.update(object);  
 
