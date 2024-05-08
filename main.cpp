@@ -32,25 +32,36 @@ while(!input_engine.quit)
 	if (first_pass || play_pause)
 	{
 		// update all objects
-		for(auto object = graphics_engine.render_buffer.begin(); object != graphics_engine.render_buffer.end(); object++)
+		for(auto object_locator = graphics_engine.render_buffer.begin(); object_locator != graphics_engine.render_buffer.end(); object_locator++)
 		{	
 			
-			if ((*object) != nullptr)
-			{
-				(*object)->update();
-			
-				physics_engine.update(*object);
-				std::list<GameObject*> other_objs;
-				if ((*object)->collider.detect_collisions) graphics_engine.render_buffer.search(*object, other_objs);
-				collision_engine.update(*object,other_objs);
-				sprite_engine.update(*object);
-				scroll_engine.update(*object);
-				camera_engine.update(*object);
+			GameObject* object = object_locator->item;
 
-				graphics_engine.render_buffer.reinsert(object);
+			
+			if ( object != NULL)
+			{
+
+				if (graphics_engine.contain(object))
+				{
+					object->update();			
+					physics_engine.update(object);
+					std::list<GameObject*> other_objs;
+					if (object->collider.detect_collisions) graphics_engine.render_buffer.search(object, other_objs);
+					collision_engine.update(object,other_objs);
+
+				}
+					sprite_engine.update(object);
+					camera_engine.update(object);
+					scroll_engine.update(object);
+					graphics_engine.render_buffer.reinsert(object_locator);
+	
 			}
 			if (first_pass) first_pass = false;
 		} 
+
+		
+
+
 	} else if (!play_pause)
 	{
 		scroll_engine.move_world();
