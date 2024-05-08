@@ -184,7 +184,7 @@ void EngineInterface::object_contorls(){
             for (const auto& entry : std::filesystem::directory_iterator(exe_dir.string() + "/game_data/assets"))
             {
                 if (entry.path().extension() == ".bmp") {
-                    object_info.available_assets.push_back(entry.path().string()); 
+                    object_info.available_assets.push_back( "./game_data/assets/" + entry.path().filename().string()); 
                 }
             }
         }
@@ -295,11 +295,11 @@ void EngineInterface::object_contorls(){
         {
             if (input_engine.right_click)
             {
-                for (auto objects = graphics_engine.render_buffer.begin(); objects != graphics_engine.render_buffer.end(); objects++)
-                {   
-                    if ((*objects)->collider.in_rect(ImGui::GetMousePos().x, ImGui::GetMousePos().y))
+                for (auto object_locator = graphics_engine.render_buffer.begin(); object_locator != graphics_engine.render_buffer.end(); object_locator++)
+                {   GameObject* objects = object_locator->item;
+                    if (objects->collider.in_rect(ImGui::GetMousePos().x, ImGui::GetMousePos().y))
                     {
-                        graphics_engine.render_buffer.remove(objects);
+                        graphics_engine.render_buffer.remove(object_locator);
                         break;
                     }
                 }
@@ -394,8 +394,9 @@ void EngineInterface::scene_controls(){
 
         int i = 0;
         std::string object_name;       
-        for(auto& game_objects : graphics_engine.render_buffer)
+        for(auto& object_locator : graphics_engine.render_buffer)
         {   
+            GameObject* game_objects = object_locator.item;
             object_name = "game_object_" + std::to_string(i);
             XMLElement* object = doc.NewElement(object_name.c_str());
             object->SetAttribute("object_name",game_objects->object_name.c_str());
@@ -620,8 +621,10 @@ void EngineInterface::camera_controls(){
     {
         if (input_engine.left_click)
             {
-                for (auto& objects : graphics_engine.render_buffer)
+                for (auto& object_locator : graphics_engine.render_buffer)
                 {
+                    GameObject* objects = object_locator.item;
+
                     if (objects->collider.in_rect(ImGui::GetMousePos().x, ImGui::GetMousePos().y))
                     {
                         objects->camera.camera_active = true;
