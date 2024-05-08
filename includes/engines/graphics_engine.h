@@ -44,8 +44,10 @@ public: // Constructor
 	
 	//std::vector<std::unique_ptr <GameObject> > render_buffer;
 	QuadTreeContainer<GameObject* > render_buffer;
+	std::list<GameObject* > waiting_room;
 
 	void update();	
+	bool contain(GameObject* object);
 };
 
 

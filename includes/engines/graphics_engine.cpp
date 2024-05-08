@@ -32,8 +32,9 @@ void GraphicsEngine::update()
 	
 	if (engine_interface.view_grid) draw_grid();
 
-	for (auto& objects : render_buffer) {
+	for (auto& object_locator : render_buffer) {
 
+		GameObject* objects = object_locator.item;
     	// Convert the surface to a texture
     	//SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, objects->sprite.current);
 
@@ -84,5 +85,10 @@ void GraphicsEngine::draw_grid() {
 }
 
 
-
+bool GraphicsEngine::contain(GameObject* object)
+{
+	if (object == nullptr) return false;
+	return (object->physics.position.x > 0 && object->physics.position.x + object->getWidth() < width  && 
+		object->physics.position.y > 0 && object->physics.position.y < height);
+}
 
