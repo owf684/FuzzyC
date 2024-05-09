@@ -68,7 +68,11 @@ while(!input_engine.quit)
 	}
 
 	// update delta time step
-	usleep((1.0 / frames_per_second_f)*micro_seconds_f);
+	auto frame_rate = (1.0 / frames_per_second_f)*micro_seconds_f;
+
+	if (frame_rate - dt >0)
+		usleep(frame_rate - dt);
+
 	auto dt_end = high_resolution_clock::now();
 	auto dt_final = duration_cast<milliseconds>(dt_end - dt_start);
 	dt = dt_final.count()/1000.0;
