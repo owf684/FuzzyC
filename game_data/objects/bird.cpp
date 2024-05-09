@@ -7,8 +7,6 @@ bird::bird()
 {   // open a json file maybe and read bird attributes then set them accordingly
 
     sprite.set_current("./game_data/assets/bird.bmp");
-    
-   
     physics.gravity = 980;
     collider.detect_collisions = true;
 
