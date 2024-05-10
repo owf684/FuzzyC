@@ -25,8 +25,8 @@ void ScrollEngine::update(GameObject* object)
     {
         if (!object->camera.camera_active)
         {
-            object->physics.position.y = (object->physics.position.y - scroll_y_velocity*dt - 0.5*(object->physics.force.y/object->physics.mass)*pow(dt,2));
-        } 
+            object->physics.position.y = (object->physics.position.y - scroll_y_velocity*dt );
+        }
     }
     
 
@@ -97,10 +97,6 @@ void ScrollEngine::move_world()
             accumulated_x = 0;
             accumulated_y = 0;
             engine_interface.set_to_zero = false;
-
-
         }
-
-
     }
 }
