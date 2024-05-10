@@ -48,6 +48,10 @@ class QuadTree
         QuadTree(Point top_left_in, Point bottom_right_in){
             top_left = top_left_in;
             bottom_right = bottom_right_in;
+            top_left.x -= 100;
+            top_left.y -= 100;
+            bottom_right.x += 100;
+            bottom_right.y += 100;
             width = bottom_right.x - top_left.x;
             height = bottom_right.y - top_left.y;
             area = width*height;
