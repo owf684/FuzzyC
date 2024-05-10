@@ -71,7 +71,6 @@ void GraphicsEngine::draw_grid() {
 	}
 	
 	
-	
     // draws vertical grid lines below 
     for (int y = 0; y <=height-scroll_engine.accumulated_y; y += grid_size) {
         SDL_RenderDrawLine(renderer, 0, y+scroll_engine.accumulated_y, width, y+scroll_engine.accumulated_y);
@@ -88,7 +87,7 @@ void GraphicsEngine::draw_grid() {
 bool GraphicsEngine::contain(GameObject* object)
 {
 	if (object == nullptr) return false;
-	return (object->physics.position.x > 0 && object->physics.position.x + object->getWidth() < width  && 
-		object->physics.position.y > 0 && object->physics.position.y < height);
+	return (object->physics.position.x + object->getWidth() > 0 && object->physics.position.x < width && 
+		object->physics.position.y  > 0 && object->physics.position.y  < height );
 }
 
