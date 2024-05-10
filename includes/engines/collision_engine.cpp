@@ -36,7 +36,7 @@
 
 
 
-void CollisionEngine::update(GameObject* object, std::list<GameObject* > &other_objs) 
+void CollisionEngine::update(GameObject* object) 
 {
     // reset colliders    
     object->collider.reset();
@@ -49,6 +49,9 @@ void CollisionEngine::update(GameObject* object, std::list<GameObject* > &other_
     object->collider.box.w = object->sprite.rect.w;
     object->collider.box.h = object->sprite.rect.h;
 
+    std::list<GameObject*> other_objs;
+	if (object->collider.detect_collisions) graphics_engine.render_buffer.search(object, other_objs);
+			
     
     for(auto& other : other_objs)
     {
