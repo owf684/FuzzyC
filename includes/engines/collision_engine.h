@@ -10,7 +10,7 @@
 class CollisionEngine {
 
     public:
-        void  update(GameObject* object, std::list<GameObject* > &other_objs);
+        void  update(GameObject* object);
 
         // collision handlers
         void down_collision(GameObject* current_object,GameObject* other);
