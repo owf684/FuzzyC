@@ -10,8 +10,8 @@ class ColliderComponent{
 
     // custom rect type
     struct Box{
-        int x;
-        int y;
+        float x;
+        float y;
         int w;
         int h;
     };
