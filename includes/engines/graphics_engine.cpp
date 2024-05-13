@@ -24,6 +24,7 @@
 *  Purpose: loads and renders all objects in the render_buffer
 */
 
+
 void GraphicsEngine::update()
 {
 
@@ -33,19 +34,16 @@ void GraphicsEngine::update()
 	if (engine_interface.view_grid) draw_grid();
 
 	for (auto& object_locator : render_buffer) {
-
+	
 		GameObject* objects = object_locator.item;
-    	// Convert the surface to a texture
-    	//SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, objects->sprite.current);
+
+		if (!contain(objects)) continue;
 
     	// Check if the conversion was successful
     	if (objects->sprite.current_texture != nullptr) {
 
         	// Copy the texture to the renderer
        		SDL_RenderCopy(renderer, objects->sprite.current_texture, nullptr, &objects->sprite.rect);
-
-        	// Free the texture (you can do this after rendering)
-        	//SDL_DestroyTexture(texture);
    	 	}
 	}
 
@@ -61,24 +59,24 @@ void GraphicsEngine::draw_grid() {
 
 	// draws horizontal grid lines above 0 
 	for (int x =0; x <= width-scroll_engine.accumulated_x; x += grid_size) {
-        SDL_RenderDrawLine(renderer, x+scroll_engine.accumulated_x, 0, x+scroll_engine.accumulated_x, height);
+        SDL_RenderDrawLine(renderer, float(x)+scroll_engine.accumulated_x, 0, float(x)+scroll_engine.accumulated_x, height);
     }
 
 	
 	// draws horizontal grid lines below 0
 	for (int x =0; x <= width+scroll_engine.accumulated_x; x += grid_size) {
-        SDL_RenderDrawLine(renderer, scroll_engine.accumulated_x - x, 0, scroll_engine.accumulated_x-x, height);
+        SDL_RenderDrawLine(renderer, scroll_engine.accumulated_x - float(x), 0, scroll_engine.accumulated_x-float(x), height);
 	}
 	
 	
     // draws vertical grid lines below 
     for (int y = 0; y <=height-scroll_engine.accumulated_y; y += grid_size) {
-        SDL_RenderDrawLine(renderer, 0, y+scroll_engine.accumulated_y, width, y+scroll_engine.accumulated_y);
+        SDL_RenderDrawLine(renderer, 0, float(y)+scroll_engine.accumulated_y, width, float(y)+scroll_engine.accumulated_y);
     }
 
 	// draws vertical grid lines above
 	for (int y = 0; y <=height+scroll_engine.accumulated_y; y += grid_size) {
-        SDL_RenderDrawLine(renderer, 0, scroll_engine.accumulated_y-y, width, scroll_engine.accumulated_y-y);
+        SDL_RenderDrawLine(renderer, 0, scroll_engine.accumulated_y-float(y), width, scroll_engine.accumulated_y-float(y));
     }
 
 }
