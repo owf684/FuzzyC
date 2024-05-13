@@ -141,6 +141,8 @@ void EngineInterface::engine_controls(){
         system("make clean; make all; ./restart_engine.sh&");
     }
 
+    ImGui::SameLine();
+   ImGui::LabelText("dt", "%f", dt);
     // second line -- fps controls
     ImGui::SetNextItemWidth(128);
     ImGui::SliderFloat("FPS",&frames_per_second_f,60.0,120.0);
@@ -637,12 +639,12 @@ void EngineInterface::camera_controls(){
 
     }
     ImGui::SetNextItemWidth(128);
-    ImGui::SliderFloat("x-axis left scroll threshold",&scroll_engine.left_x_scroll_threshold,graphics_engine.width/2,graphics_engine.width);
+    ImGui::SliderInt("x-axis left scroll threshold",&scroll_engine.left_x_scroll_threshold,graphics_engine.width/2,graphics_engine.width);
     ImGui::SetNextItemWidth(128);
-    ImGui::SliderFloat("x-axis right scroll threshold",&scroll_engine.right_x_scroll_threshold,0,graphics_engine.width/2);
+    ImGui::SliderInt("x-axis right scroll threshold",&scroll_engine.right_x_scroll_threshold,0,graphics_engine.width/2);
     ImGui::SetNextItemWidth(128);
-    ImGui::SliderFloat("y-axis up scroll threshold",&scroll_engine.up_y_scroll_threshold,0,graphics_engine.height/2);
+    ImGui::SliderInt("y-axis up scroll threshold",&scroll_engine.up_y_scroll_threshold,0,graphics_engine.height/2);
     ImGui::SetNextItemWidth(128);
-    ImGui::SliderFloat("y-axis down scroll threshold",&scroll_engine.down_y_scroll_threshold,graphics_engine.height/2,graphics_engine.height);
+    ImGui::SliderInt("y-axis down scroll threshold",&scroll_engine.down_y_scroll_threshold,graphics_engine.height/2,graphics_engine.height);
     ImGui::End();
 }
