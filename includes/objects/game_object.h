@@ -13,6 +13,14 @@ class GameObject{
     GameObject() 
     {
     }
+    GameObject(float x, float y, float w, float h)
+    {
+      set_position(x, y);
+      sprite.rect.w = w;
+      sprite.rect.h = h;
+      collider.box.w = w;
+      collider.box.h = h;
+    }
     Sprite sprite;
  
     PhysicsComponent physics;
