@@ -6,21 +6,16 @@ using namespace std;
 bird::bird()
 {   // open a json file maybe and read bird attributes then set them accordingly
 
-    try {
     sprite.set_current("./game_data/assets/bird.bmp");
-    }
-    catch(...){
-
-        system("pwd");
-
-    }
     physics.gravity = 980;
+    collider.detect_collisions = true;
+
 }
 
 
-void bird::update()
+void bird::update() 
 {
-    move_horizontal();    
+    move_horizontal();
 
 }
 
@@ -30,7 +25,7 @@ void bird::move_horizontal()
     if (input_engine.arrow_keys.up &&  collider.is.down) // bug here for some reason this true upon engine start. screws things up
     {
         //move up
-        physics.impulse.y = -7000;
+       physics.impulse.y = -7000;
     }
     if (input_engine.arrow_keys.right)
     {

@@ -17,7 +17,6 @@ class RDOH
         void init_objects();
         void generate_object(std::string object_name, ImVec2 mouse_position, bool camera_active);
 
-
 };
 
 

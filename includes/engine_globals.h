@@ -12,6 +12,7 @@
 #include "./objects/game_object.h"
 #include "./objects/rdoh.h"
 #include "./objects/rdoh_util.h"
+#include <filesystem>
 #include <map>
 #include <any>
 
@@ -36,5 +37,7 @@ extern std::map<std::string, std::any> objects_library;
 // object globals
 extern RDOH object_handler;
 extern RdohUtil object_util;
+extern std::filesystem::path exe_path;
+extern std::filesystem::path exe_dir;
 
 #endif

@@ -23,7 +23,7 @@
 *
 */
 
-void PhysicsEngine::update(std::unique_ptr<GameObject> &object)
+void PhysicsEngine::update(GameObject* object)
 {
 
 

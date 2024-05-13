@@ -22,7 +22,7 @@
 *
 */
 
-void SpriteEngine::update(std::unique_ptr<GameObject> &object)
+void SpriteEngine::update(GameObject* object)
 {
     object->sprite.set_position(object->physics.position.x,object->physics.position.y);
 }

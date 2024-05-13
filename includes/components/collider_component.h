@@ -1,8 +1,6 @@
 #ifndef COLLIDER_COMPONENT_H
 #define COLLIDER_COMPONENT_H
 
-
-
 class ColliderComponent{
 
 
@@ -11,20 +9,23 @@ class ColliderComponent{
     ColliderComponent();
 
     // custom rect type
-    struct {
-        int x;
-        int y;
+    struct Box{
+        float x;
+        float y;
         int w;
         int h;
-    } box;
+    };
+    Box box;
 
     // bools for collision detection
-    struct{
+    struct Is{
     bool down;
     bool up;
     bool left;
     bool right;
-    } is;
+    };
+    
+    Is is;
 
     // return rough estimate of where the box collider is
     int left();
@@ -35,15 +36,8 @@ class ColliderComponent{
     int center_y();
     void reset();
     bool in_rect(float x, float y);
-    private:
+    bool detect_collisions;
 
 };
-
-
-
-
-
-
-
 
 #endif

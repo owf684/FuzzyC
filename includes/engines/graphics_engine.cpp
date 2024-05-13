@@ -18,29 +18,12 @@
 #include "engine_globals.h"
 #include "interface_globals.h"
 
-// Constructor
-GraphicsEngine::GraphicsEngine(int input_width,int input_height, int input_bpp)
-{
-	// set dimensions
-	width = input_width;
-	height = input_height;
-	bpp = input_bpp;
-	
-	
-    SDL_Init(SDL_INIT_EVERYTHING);
-    SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_FULLSCREEN_DESKTOP, &window, &renderer);
-	SDL_SetWindowPosition(window,0,0);
-	SDL_SetWindowResizable(window, SDL_TRUE);
-    SDL_RenderClear(renderer);
-    SDL_RenderPresent(renderer);
-	grid_size = 32;
-
-}
 
 /* Function: update()
 *
 *  Purpose: loads and renders all objects in the render_buffer
 */
+
 
 void GraphicsEngine::update()
 {
@@ -50,19 +33,17 @@ void GraphicsEngine::update()
 	
 	if (engine_interface.view_grid) draw_grid();
 
-	for (int i = 0; i < render_buffer.size(); i++) {
+	for (auto& object_locator : render_buffer) {
+	
+		GameObject* objects = object_locator.item;
 
-    	// Convert the surface to a texture
-    	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, render_buffer[i]->sprite.current);
+		if (!contain(objects)) continue;
 
     	// Check if the conversion was successful
-    	if (texture != nullptr) {
+    	if (objects->sprite.current_texture != nullptr) {
 
         	// Copy the texture to the renderer
-       		SDL_RenderCopy(renderer, texture, nullptr, &render_buffer[i]->sprite.rect);
-
-        	// Free the texture (you can do this after rendering)
-        	SDL_DestroyTexture(texture);
+       		SDL_RenderCopy(renderer, objects->sprite.current_texture, nullptr, &objects->sprite.rect);
    	 	}
 	}
 
@@ -78,29 +59,33 @@ void GraphicsEngine::draw_grid() {
 
 	// draws horizontal grid lines above 0 
 	for (int x =0; x <= width-scroll_engine.accumulated_x; x += grid_size) {
-        SDL_RenderDrawLine(renderer, x+scroll_engine.accumulated_x, 0, x+scroll_engine.accumulated_x, height);
+        SDL_RenderDrawLine(renderer, float(x)+scroll_engine.accumulated_x, 0, float(x)+scroll_engine.accumulated_x, height);
     }
 
 	
 	// draws horizontal grid lines below 0
 	for (int x =0; x <= width+scroll_engine.accumulated_x; x += grid_size) {
-        SDL_RenderDrawLine(renderer, scroll_engine.accumulated_x - x, 0, scroll_engine.accumulated_x-x, height);
+        SDL_RenderDrawLine(renderer, scroll_engine.accumulated_x - float(x), 0, scroll_engine.accumulated_x-float(x), height);
 	}
-	
 	
 	
     // draws vertical grid lines below 
     for (int y = 0; y <=height-scroll_engine.accumulated_y; y += grid_size) {
-        SDL_RenderDrawLine(renderer, 0, y+scroll_engine.accumulated_y, width, y+scroll_engine.accumulated_y);
+        SDL_RenderDrawLine(renderer, 0, float(y)+scroll_engine.accumulated_y, width, float(y)+scroll_engine.accumulated_y);
     }
 
 	// draws vertical grid lines above
 	for (int y = 0; y <=height+scroll_engine.accumulated_y; y += grid_size) {
-        SDL_RenderDrawLine(renderer, 0, scroll_engine.accumulated_y-y, width, scroll_engine.accumulated_y-y);
+        SDL_RenderDrawLine(renderer, 0, scroll_engine.accumulated_y-float(y), width, scroll_engine.accumulated_y-float(y));
     }
 
 }
 
 
-
+bool GraphicsEngine::contain(GameObject* object)
+{
+	if (object == nullptr) return false;
+	return (object->physics.position.x + object->getWidth() > 0 && object->physics.position.x < width && 
+		object->physics.position.y  > 0 && object->physics.position.y  < height );
+}
 

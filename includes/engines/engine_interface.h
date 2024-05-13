@@ -44,6 +44,8 @@ class EngineInterface {
         
         std::vector<std::string> available_scenes;
         std::vector<std::string> available_scene_names;
+
+        void update_scenes_vector();
     
 };
 #endif

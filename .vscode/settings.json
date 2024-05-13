@@ -124,7 +124,9 @@
         "fstream": "cpp",
         "map": "cpp",
         "stack": "cpp",
-        "any": "cpp"
+        "any": "cpp",
+        "list": "cpp"
     },
-    "C_Cpp.dimInactiveRegions": false
+    "C_Cpp.dimInactiveRegions": false,
+    "makefile.makefilePath": "./"
 }

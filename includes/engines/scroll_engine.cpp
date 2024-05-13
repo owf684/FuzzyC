@@ -11,7 +11,7 @@ ScrollEngine::ScrollEngine()
     up_y_scroll_threshold = graphics_engine.width/4;
     down_y_scroll_threshold = graphics_engine.width/2;
 }
-void ScrollEngine::update(std::unique_ptr<GameObject> &object)
+void ScrollEngine::update(GameObject* object)
 {
     if (scroll_x_position)
     {
@@ -25,8 +25,8 @@ void ScrollEngine::update(std::unique_ptr<GameObject> &object)
     {
         if (!object->camera.camera_active)
         {
-            object->physics.position.y = (object->physics.position.y - scroll_y_velocity*dt - 0.5*(object->physics.force.y/object->physics.mass)*pow(dt,2));
-        } 
+            object->physics.position.y = (object->physics.position.y - scroll_y_velocity*dt );
+        }
     }
     
 
@@ -38,8 +38,9 @@ void ScrollEngine::move_world()
     if (engine_interface.move_world_enabled)
     {
         bool scroll_direction[4] = {false, false, false, false};
-        for (auto& object : graphics_engine.render_buffer)
+        for (auto& object_locator : graphics_engine.render_buffer)
         {
+            GameObject* object = object_locator.item;
  
             if (input_engine.arrow_keys.right)
             {
@@ -86,8 +87,8 @@ void ScrollEngine::move_world()
 
         if (engine_interface.set_to_zero)
         {
-            for (auto& object : graphics_engine.render_buffer)
-            {
+            for (auto& object_locator : graphics_engine.render_buffer)
+            {   GameObject* object = object_locator.item;
                 object->set_position(object->physics.position.x - accumulated_x, object->physics.position.y - accumulated_y);
 			    sprite_engine.update(object);  
 
@@ -96,10 +97,6 @@ void ScrollEngine::move_world()
             accumulated_x = 0;
             accumulated_y = 0;
             engine_interface.set_to_zero = false;
-
-
         }
-
-
     }
 }

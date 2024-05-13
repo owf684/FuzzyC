@@ -59,17 +59,22 @@ EngineInterface::EngineInterface()
     ImGui_ImplSDL2_InitForSDLRenderer(graphics_engine.window, graphics_engine.renderer);
     ImGui_ImplSDLRenderer2_Init(graphics_engine.renderer);
 
-    // update scenes vector
-    for (const auto& entry : std::filesystem::directory_iterator("./game_data/scenes"))
+   
+
+}
+
+
+void EngineInterface::update_scenes_vector()
+{
+     // update scenes vector
+    for (const auto& entry : std::filesystem::directory_iterator(exe_dir.string() + "/game_data/scenes"))
     {
         if (entry.path().extension() == ".xml") {
             available_scenes.push_back(entry.path().string()); 
             available_scene_names.push_back(entry.path().filename().replace_extension(""));
         }
     }
-
 }
-
 /* Function: update
 * 
 *  Purpose: Calls the ImGUI
@@ -136,6 +141,8 @@ void EngineInterface::engine_controls(){
         system("make clean; make all; ./restart_engine.sh&");
     }
 
+    ImGui::SameLine();
+   ImGui::LabelText("dt", "%f", dt);
     // second line -- fps controls
     ImGui::SetNextItemWidth(128);
     ImGui::SliderFloat("FPS",&frames_per_second_f,60.0,120.0);
@@ -175,10 +182,11 @@ void EngineInterface::object_contorls(){
             show_add_object_menu = true;
             // iterate through directory and get asset bmp files and load them into asset vector
             object_info.available_assets.clear();
-            for (const auto& entry : std::filesystem::directory_iterator("./game_data/assets"))
+
+            for (const auto& entry : std::filesystem::directory_iterator(exe_dir.string() + "/game_data/assets"))
             {
                 if (entry.path().extension() == ".bmp") {
-                    object_info.available_assets.push_back(entry.path().string()); 
+                    object_info.available_assets.push_back( "./game_data/assets/" + entry.path().filename().string()); 
                 }
             }
         }
@@ -289,16 +297,12 @@ void EngineInterface::object_contorls(){
         {
             if (input_engine.right_click)
             {
-                for (auto& objects : graphics_engine.render_buffer)
-                {
+                for (auto object_locator = graphics_engine.render_buffer.begin(); object_locator != graphics_engine.render_buffer.end(); object_locator++)
+                {   GameObject* objects = object_locator->item;
                     if (objects->collider.in_rect(ImGui::GetMousePos().x, ImGui::GetMousePos().y))
                     {
-                        auto it = std::find(graphics_engine.render_buffer.begin(),graphics_engine.render_buffer.end(),objects);
-                        if (it != graphics_engine.render_buffer.end())
-                        {
-                            graphics_engine.render_buffer.erase(it);
-                            break;
-                        }
+                        graphics_engine.render_buffer.remove(object_locator);
+                        break;
                     }
                 }
             }
@@ -332,7 +336,7 @@ void EngineInterface::scene_controls(){
          // update scenes vector
          available_scenes.clear();
          available_scene_names.clear();
-        for (const auto& entry : std::filesystem::directory_iterator("./game_data/scenes"))
+        for (const auto& entry : std::filesystem::directory_iterator( exe_dir.string() + "/game_data/scenes"))
         {
             if (entry.path().extension() == ".xml") {
                     available_scenes.push_back(entry.path().string()); 
@@ -392,8 +396,9 @@ void EngineInterface::scene_controls(){
 
         int i = 0;
         std::string object_name;       
-        for(auto& game_objects : graphics_engine.render_buffer)
+        for(auto& object_locator : graphics_engine.render_buffer)
         {   
+            GameObject* game_objects = object_locator.item;
             object_name = "game_object_" + std::to_string(i);
             XMLElement* object = doc.NewElement(object_name.c_str());
             object->SetAttribute("object_name",game_objects->object_name.c_str());
@@ -410,7 +415,7 @@ void EngineInterface::scene_controls(){
         root->InsertEndChild(ObjectList);
 
         // Save the XML document to a file
-        std::string scene_name_and_dir= "./game_data/scenes/"  + std::string(scene_name) + ".xml";
+        std::string scene_name_and_dir= exe_dir.string() + "/game_data/scenes/"  + std::string(scene_name) + ".xml";
 
         if (doc.SaveFile(scene_name_and_dir.c_str()) == XML_SUCCESS) { 
             std::cout << "XML document created successfully." << std::endl;
@@ -422,7 +427,7 @@ void EngineInterface::scene_controls(){
                 // update scenes vector
          available_scenes.clear();
          available_scene_names.clear();
-        for (const auto& entry : std::filesystem::directory_iterator("./game_data/scenes"))
+        for (const auto& entry : std::filesystem::directory_iterator( exe_dir.string() +"/game_data/scenes"))
         {
             if (entry.path().extension() == ".xml") {
                     available_scenes.push_back(entry.path().string()); 
@@ -618,8 +623,10 @@ void EngineInterface::camera_controls(){
     {
         if (input_engine.left_click)
             {
-                for (auto& objects : graphics_engine.render_buffer)
+                for (auto& object_locator : graphics_engine.render_buffer)
                 {
+                    GameObject* objects = object_locator.item;
+
                     if (objects->collider.in_rect(ImGui::GetMousePos().x, ImGui::GetMousePos().y))
                     {
                         objects->camera.camera_active = true;
@@ -632,12 +639,12 @@ void EngineInterface::camera_controls(){
 
     }
     ImGui::SetNextItemWidth(128);
-    ImGui::SliderFloat("x-axis left scroll threshold",&scroll_engine.left_x_scroll_threshold,graphics_engine.width/2,graphics_engine.width);
+    ImGui::SliderInt("x-axis left scroll threshold",&scroll_engine.left_x_scroll_threshold,graphics_engine.width/2,graphics_engine.width);
     ImGui::SetNextItemWidth(128);
-    ImGui::SliderFloat("x-axis right scroll threshold",&scroll_engine.right_x_scroll_threshold,0,graphics_engine.width/2);
+    ImGui::SliderInt("x-axis right scroll threshold",&scroll_engine.right_x_scroll_threshold,0,graphics_engine.width/2);
     ImGui::SetNextItemWidth(128);
-    ImGui::SliderFloat("y-axis up scroll threshold",&scroll_engine.up_y_scroll_threshold,0,graphics_engine.height/2);
+    ImGui::SliderInt("y-axis up scroll threshold",&scroll_engine.up_y_scroll_threshold,0,graphics_engine.height/2);
     ImGui::SetNextItemWidth(128);
-    ImGui::SliderFloat("y-axis down scroll threshold",&scroll_engine.down_y_scroll_threshold,graphics_engine.height/2,graphics_engine.height);
+    ImGui::SliderInt("y-axis down scroll threshold",&scroll_engine.down_y_scroll_threshold,graphics_engine.height/2,graphics_engine.height);
     ImGui::End();
 }

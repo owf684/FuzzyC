@@ -8,7 +8,7 @@
 class PhysicsEngine
 {
   public:
-    void update(std::unique_ptr<GameObject> &object);
+    void update(GameObject* object);
     
 };
 

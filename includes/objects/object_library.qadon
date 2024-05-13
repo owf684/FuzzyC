@@ -1,8 +1,9 @@
 {
-breakable_brick : breakable_brick
-test_platform : test_platform
-bird : bird
-brick : brick
-mario : mario
 warp_pipe : warp_pipe
+mario : mario
+brick : brick
+question_block : question_block
+bird : bird
+test_platform : test_platform
+breakable_brick : breakable_brick
 }

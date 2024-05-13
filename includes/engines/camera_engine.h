@@ -7,8 +7,8 @@
 class CameraEngine {
     public:
         CameraEngine();
-        void update(std::unique_ptr<GameObject> &object);
-        void handle_camera(std::unique_ptr<GameObject> &object);
+        void update(GameObject* object);
+        void handle_camera(GameObject* object);
 };
 
 #endif
