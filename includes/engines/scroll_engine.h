@@ -18,10 +18,10 @@ class ScrollEngine {
         float scroll_x_velocity;
         bool scroll_y_position;
         float scroll_y_velocity;
-        float left_x_scroll_threshold;
-        float right_x_scroll_threshold;
-        float up_y_scroll_threshold;
-        float down_y_scroll_threshold;        
+        int left_x_scroll_threshold;
+        int right_x_scroll_threshold;
+        int up_y_scroll_threshold;
+        int down_y_scroll_threshold;        
         float last_x_position;
 };
 
